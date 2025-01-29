@@ -7,7 +7,7 @@
 ## Problem Statement
 **Which problem is your project solving?**
 
- A gym website that includes all the information and features in one place. Users don’t need to visit the gym physically or go to different sources to learn about it.
+A gym website that includes all the information and features in one place. Users don’t need to visit the gym physically or go to different sources to know about it.
 
 ---
 
@@ -77,7 +77,6 @@ The website provides all gym-related information in one place. Users can explore
 ### Key Metrics:
 - Number of website visitors
 - Number of users generating diet charts
-- Participation in the game section
 
 ### Feedback Collection:
 - User surveys
