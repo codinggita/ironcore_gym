@@ -1,0 +1,85 @@
+.service-container {
+    width: 80%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #ddd;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-button.active,
+.tab-button:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.content-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.highlight {
+    background-color: #e3f2fd;
+    border-left: 5px solid #3498db;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkmark {
+    margin-right: 10px;
+    font-weight: bold;
+    color: green;
+}
