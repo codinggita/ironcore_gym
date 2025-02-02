@@ -1,7 +1,42 @@
 # Project Name: Ironcore Gym
 
-### UI/UX design : https://www.figma.com/design/xx6t46xMZOAVmXsBXRbliP/Ironcore-Gym?node-id=0-1&t=pgF3KdHZajE7uwKu-1
+## [Design Link](https://www.figma.com/design/xx6t46xMZOAVmXsBXRbliP/Ironcore-Gym?node-id=0-1&t=pgF3KdHZajE7uwKu-1)
 
+## [postman documentation Link](https://documenter.getpostman.com/view/39189278/2sAYX3rPFi)
+---
+
+### [Authentication Backend Deployed Link](https://auth-backend-0i75.onrender.com)
+
+#### Routes:
+- **Create Account** (POST): `/api/user/signup`  
+  URL: [POST - /api/user/signup](https://auth-backend-0i75.onrender.com/api/user/signup)
+
+- **Login** (POST): `/api/user/signIn`  
+  URL: [POST - /api/user/signIn](https://auth-backend-0i75.onrender.com/api/user/signIn)
+
+---
+
+### [Blogs Backend Deployed Link](https://blogs-nxzn.onrender.com)
+
+#### Route:
+- **Get Blogs** (GET): `/articles`  
+  URL: [GET - /articles](https://blogs-nxzn.onrender.com/articles)
+
+---
+
+### [Wellness Backend Deployed Link](https://ironcore-backend.onrender.com)
+
+#### Routes:
+- **Calculate BMI** (POST): `/calculate-bmi`  
+  URL: [POST - /calculate-bmi](https://ironcore-backend.onrender.com/calculate-bmi)
+
+- **Submit User Details for Diet Chart** (POST): `/user-details`  
+  URL: [POST - /user-details](https://ironcore-backend.onrender.com/user-details)
+
+- **Get User Data for Diet Chart** (GET): `/get-user-details/{id}`  
+  URL: [GET - /get-user-details/679cc80583c1638a1418469e](https://ironcore-backend.onrender.com/get-user-details/679cc80583c1638a1418469e)
+---
+---
 ---
 
 ## Problem Statement
