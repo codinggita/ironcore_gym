@@ -16,7 +16,7 @@ function Login() {
     setError("");
 
     try {
-      const response = await fetch("https://auth-backend-0i75.onrender.com/api/user/signIn", {
+      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
