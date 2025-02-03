@@ -11,36 +11,36 @@
 
 ---
 
-### [Authentication Backend Deployed Link](https://auth-backend-0i75.onrender.com)
+### [Authentication Backend Deployed Link](https://authentication-backend-kbui.onrender.com)
 
 #### Routes:
 - **Create Account** (POST): `/api/user/signup`  
-  URL: [POST - /api/user/signup](https://auth-backend-0i75.onrender.com/api/user/signup)
+  URL: [POST - /api/user/signup](https://authentication-backend-kbui.onrender.com/api/user/signup)
 
 - **Login** (POST): `/api/user/signIn`  
-  URL: [POST - /api/user/signIn](https://auth-backend-0i75.onrender.com/api/user/signIn)
+  URL: [POST - /api/user/signIn](https://authentication-backend-kbui.onrender.com/api/user/signIn)
 
 ---
 
-### [Blogs Backend Deployed Link](https://blogs-nxzn.onrender.com)
+### [Blogs Backend Deployed Link](https://blogs-backend-i6z7.onrender.com)
 
 #### Route:
 - **Get Blogs** (GET): `/articles`  
-  URL: [GET - /articles](https://blogs-nxzn.onrender.com/articles)
+  URL: [GET - /articles](https://blogs-backend-i6z7.onrender.com/articles)
 
 ---
 
-### [Wellness Backend Deployed Link](https://ironcore-backend.onrender.com)
+### [Wellness Backend Deployed Link](https://wellness-backend-bd6i.onrender.com)
 
 #### Routes:
 - **Calculate BMI** (POST): `/calculate-bmi`  
-  URL: [POST - /calculate-bmi](https://ironcore-backend.onrender.com/calculate-bmi)
+  URL: [POST - /calculate-bmi](https://wellness-backend-bd6i.onrender.com/calculate-bmi)
 
 - **Submit User Details for Diet Chart** (POST): `/user-details`  
-  URL: [POST - /user-details](https://ironcore-backend.onrender.com/user-details)
+  URL: [POST - /user-details](https://wellness-backend-bd6i.onrender.com/user-details)
 
 - **Get User Data for Diet Chart** (GET): `/get-user-details/{id}`  
-  URL: [GET - /get-user-details/679cc80583c1638a1418469e](https://ironcore-backend.onrender.com/get-user-details/679cc80583c1638a1418469e)
+  URL: [GET - /get-user-details/679cc80583c1638a1418469e](https://wellness-backend-bd6i.onrender.com/get-user-details/679cc80583c1638a1418469e)
 ---
 ---
 ---
