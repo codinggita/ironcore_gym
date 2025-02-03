@@ -12,18 +12,14 @@ export const signUp = async (req, res) => {
   let user = await User.findOne({ email });
   if (user) return res.status(400).json({ message: "User Already Exists" });
 
-  const confirmToken = jwt.sign({ email, confirmPassword }, process.env.JWT_SECRET, { expiresIn: "15m" });
-
   user = await User.create({ email, password });
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-  res.status(201).cookie("token", token, { httpOnly: true }).json({
-    success: true,
-    message: "User Registered. Use the confirmation token to verify your password.",
-    token,
-    confirmToken,
-  });
+  res
+    .status(201)
+    .cookie("token", token, { httpOnly: true, sameSite: "None", secure: true })
+    .json({ success: true, message: "User Registered", token });
 };
 
 export const signIn = async (req, res) => {
@@ -37,9 +33,8 @@ export const signIn = async (req, res) => {
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-  res.status(200).cookie("token", token, { httpOnly: true }).json({
-    success: true,
-    message: "Login successful!",
-    token,
-  });
+  res
+    .status(200)
+    .cookie("token", token, { httpOnly: true, sameSite: "None", secure: true })
+    .json({ success: true, message: "Login successful!", token });
 };
