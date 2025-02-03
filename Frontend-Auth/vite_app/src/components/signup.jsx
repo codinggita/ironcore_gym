@@ -9,7 +9,9 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
+
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,19 +21,31 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
-    const response = await fetch("https://auth-backend-0i75.onrender.com/api/user/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-    const data = await response.json();
-    if (response.ok) {
-      alert("Account created successfully! You can now log in.");
-      navigate("/login"); // Signup ke baad login page pe redirect
-    } else {
-      setError(data.message || "Signup failed. Try again.");
+    try {
+      const response = await fetch("http://localhost:5000/api/user/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setSuccess("Account created successfully! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        setError(data.message || "Something went wrong.");
+      }
+    } catch (error) {
+      setError("Failed to connect to server.");
     }
   };
 
@@ -40,8 +54,6 @@ function Signup() {
       <div className="signup-content">
         <h1 className="logo">IRONCORE GYM</h1>
         <h2 className="title">Create Account</h2>
-
-        {error && <p className="error-message">{error}</p>}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -59,10 +71,12 @@ function Signup() {
             <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
           </div>
 
+          {error && <p className="error-text">{error}</p>}
+          {success && <p className="success-text">{success}</p>}
+
           <p className="terms-text">
-            When you click Create account, you agree with our 
-            <a href="/terms"> Terms and Conditions</a>, and confirm that 
-            you've read our <a href="/privacy"> Privacy Policy</a>.
+            When you click Create account, you agree with our <a href="/terms">Terms and Conditions</a>, and confirm that
+            you've read our <a href="/privacy">Privacy Policy</a>.
           </p>
 
           <button type="submit" className="submit-btn">Create Account</button>
