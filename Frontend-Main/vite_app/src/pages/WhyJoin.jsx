@@ -19,7 +19,7 @@ function WhyJoin() {
         <div className="hero-overlay-2">
           <div className="hero-content-2">
             <h1>WHY JOIN IRONCORE GYM?</h1>
-            <p>
+            <p className='ridham'>
               Ironcore gym membership offers a comprehensive fitness journey to every individual.
               Supportive community, state-of-the-art equipment, certified trainers, and flexibility.
               Take a step forward toward fitness, anytime.
