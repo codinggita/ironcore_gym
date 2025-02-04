@@ -1,0 +1,312 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero-section-2 {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  overflow: hidden;
+}
+
+.hero-image-container-2 {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  animation: zoomIn 12s ease-in-out infinite alternate;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.hero-image-2 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  object-position: center top;
+  filter: brightness(0.8);
+}
+
+.hero-overlay-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.hero-content-2 {
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  animation: fadeInUp 1s ease-out;
+  backdrop-filter: blur(2px);
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content-2 h1 {
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  background: linear-gradient(45deg, #00BFFF, #ffffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 3.2rem;
+}
+
+.hero-content-2 p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-button-2 {
+  background: linear-gradient(135deg, #00BFFF 0%, #009ACD 100%);
+  color: white;
+  padding: 18px 45px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button-2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button-2::after {
+  content: '→';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.cta-button-2:hover::after {
+  right: 20px;
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content-2 h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-content-2 p {
+    font-size: 1rem;
+    max-width: 90%;
+  }
+
+  .cta-button-2 {
+    padding: 15px 35px;
+    font-size: 1.1rem;
+  }
+}
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 4rem 2rem;
+  background-color: white;
+  text-align: center;
+  justify-items: center;
+}
+
+.features-section h1 {
+  grid-column: span 2;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.feature {
+  padding: 2rem;
+  width: 80%;
+  max-width: 400px;
+}
+
+.feature img {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 1rem;
+}
+
+.feature h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.feature p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+
+  .features-section h1 {
+    grid-column: span 1;
+  }
+}
+
+/* Updated CSS for membership-section */
+.membership-section {
+  background-color: #f8f9fa; /* Light background for better contrast */
+  padding: 4rem 2rem; /* Increased padding for better spacing */
+  text-align: center;
+}
+
+.membership-section h1 {
+  font-size: 2.5rem; /* Larger font size for the heading */
+  margin-bottom: 3rem; /* Increased margin for better spacing */
+  color: #333; /* Darker color for better readability */
+  text-transform: uppercase; /* Uppercase for emphasis */
+  letter-spacing: 1px; /* Slight letter spacing for a modern look */
+}
+
+.membership-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem; /* Added gap between columns for better spacing */
+  max-width: 1200px; /* Limit width for better readability */
+  margin: 0 auto; /* Center the container */
+  padding: 0 1rem; /* Padding for smaller screens */
+}
+
+.membership-column {
+  background-color: white;
+  padding: 2rem; /* Increased padding for better spacing */
+  border-radius: 10px; /* Rounded corners for a modern look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  flex: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.membership-column:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.membership-column h2 {
+  font-size: 1.75rem; /* Larger font size for subheadings */
+  margin-bottom: 1.5rem; /* Increased margin for better spacing */
+  color: #333; /* Darker color for better readability */
+  text-transform: uppercase; /* Uppercase for emphasis */
+  letter-spacing: 0.5px; /* Slight letter spacing */
+}
+
+.membership-column ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: left; /* Align list items to the left */
+}
+
+.membership-column ul li {
+  font-size: 1.1rem; /* Slightly larger font size for list items */
+  line-height: 1.8; /* Increased line height for better readability */
+  color: #555; /* Softer color for list items */
+  margin-bottom: 0.75rem; /* Increased margin between list items */
+  padding-left: 1.5rem; /* Indent list items */
+  position: relative; /* For custom bullet points */
+}
+
+.membership-column ul li::before {
+  content: '•'; /* Custom bullet point */
+  color: #00BFFF; /* Blue color for bullet points */
+  font-size: 1.5rem; /* Larger bullet points */
+  position: absolute;
+  left: 0;
+  top: -2px; /* Adjust vertical alignment */
+}
+
+.enquire-button {
+  background: linear-gradient(135deg, #00BFFF 0%, #009ACD 100%); /* Gradient background */
+  color: white;
+  padding: 1rem 2.5rem; /* Larger padding for better clickability */
+  border: none;
+  border-radius: 30px; /* Rounded corners */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition */
+  margin-top: 3rem; /* Increased margin for better spacing */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.enquire-button:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .membership-container {
+    flex-direction: column;
+    gap: 1.5rem; /* Adjusted gap for smaller screens */
+  }
+
+  .membership-column {
+    margin: 0; /* Remove margin for better alignment */
+  }
+
+  .membership-section h1 {
+    font-size: 2rem; /* Adjusted font size for smaller screens */
+  }
+
+  .enquire-button {
+    width: 100%; /* Full width button on smaller screens */
+    padding: 1rem; /* Adjusted padding */
+  }
+}
