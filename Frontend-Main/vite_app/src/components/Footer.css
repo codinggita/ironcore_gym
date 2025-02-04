@@ -26,16 +26,19 @@
 
 .address-block {
     font-size: 1.1rem;
+    color: white;
 }
 
 .address-line {
     margin: 8px 0;
     line-height: 1.4;
+    color: white;
 }
 
 .contact-info {
     margin: 12px 0;
     font-size: 1.1rem;
+    color: white;
 }
 
 
