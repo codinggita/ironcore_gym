@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import "../design/Wellness.css";
 
 const Wellness = () => {
@@ -17,16 +17,7 @@ const Wellness = () => {
     fitnessLevel: "",
     limitations: "",
   });
-  const [formDatatwo, setFormDatatwo] = useState({
-    age: "25",
-    gender: "Female",
-    bmi: "22.5",
-    bmiStatus: "Normal",
-    dietGoal: "Maintain Weight",
-    foodPreference: "Vegetarian",
-    activityLevel: "Intermediate",
-    limitations: "Allergies",
-  });
+  const [userId, setUserId] = useState(null);
 
   const calculateBMI = () => {
     if (weight && height) {
@@ -53,10 +44,38 @@ const Wellness = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Form submitted:", formData)
-  };
+    try {
+      const response = await fetch("https://wellness-backend-bd6i.onrender.com/user-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setUserId(data.userId)
+        console.log("Form submitted successfully:", data)
+      } else {
+        console.error("Error submitting form:", data.message)
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error)
+    }
+  }
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`https://wellness-backend-bd6i.onrender.com/get-user-details/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData(data)
+        })
+        .catch((error) => console.error("Error fetching user details:", error))
+    }
+  }, [userId])
 
   return (
     <>
@@ -249,7 +268,7 @@ const Wellness = () => {
         </h1>
 
         <div className="content-wrapper">
-          <div className="form-section">
+        <div className="form-section">
             <h2>Balanced Diet Chart Generator</h2>
             <p className="subtitle">
               Simplify your meal planning with custom diet charts designed to meet your nutritional needs.
@@ -260,7 +279,7 @@ const Wellness = () => {
                 <span className="number">1</span>
                 <div className="label-input">
                   <label>📅What is your Age?</label>
-                  <input type="text" value={formDatatwo.age} readOnly />
+                  <input type="text" value={formData.age} readOnly />
                 </div>
               </div>
 
@@ -268,7 +287,7 @@ const Wellness = () => {
                 <span className="number">2</span>
                 <div className="label-input">
                   <label>👤Choose Gender</label>
-                  <input type="text" value={formDatatwo.gender} readOnly />
+                  <input type="text" value={formData.gender} readOnly />
                 </div>
               </div>
 
@@ -276,7 +295,7 @@ const Wellness = () => {
                 <span className="number">3</span>
                 <div className="label-input">
                   <label>What is your BMI ?</label>
-                  <input type="text" value={formDatatwo.bmi} readOnly />
+                  <input type="text" value={formData.bmi} readOnly />
                 </div>
               </div>
 
@@ -284,7 +303,7 @@ const Wellness = () => {
                 <span className="number">4</span>
                 <div className="label-input">
                   <label>What is your BMI Status ?</label>
-                  <input type="text" value={formDatatwo.bmiStatus} readOnly />
+                  <input type="text" value={formData.bmiStatus} readOnly />
                 </div>
               </div>
 
@@ -292,7 +311,7 @@ const Wellness = () => {
                 <span className="number">5</span>
                 <div className="label-input">
                   <label>🎯Describe your Diet Goal</label>
-                  <input type="text" value={formDatatwo.dietGoal} readOnly />
+                  <input type="text" value={formData.dietGoal} readOnly />
                 </div>
               </div>
 
@@ -300,7 +319,7 @@ const Wellness = () => {
                 <span className="number">6</span>
                 <div className="label-input">
                   <label>🥗What are your food preferences and style?</label>
-                  <input type="text" value={formDatatwo.foodPreference} readOnly />
+                  <input type="text" value={formData.foodPreferences} readOnly />
                 </div>
               </div>
 
@@ -308,7 +327,7 @@ const Wellness = () => {
                 <span className="number">7</span>
                 <div className="label-input">
                   <label>What is your current fitness/activity level?</label>
-                  <input type="text" value={formDatatwo.activityLevel} readOnly />
+                  <input type="text" value={formData.fitnessLevel} readOnly />
                 </div>
               </div>
 
@@ -316,7 +335,7 @@ const Wellness = () => {
                 <span className="number">8</span>
                 <div className="label-input">
                   <label>⚠Do you have any limitations?</label>
-                  <input type="text" value={formDatatwo.limitations} readOnly />
+                  <input type="text" value={formData.limitations} readOnly />
                 </div>
               </div>
             </div>
