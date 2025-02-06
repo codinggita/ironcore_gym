@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -27,6 +28,7 @@ function App() {
             <Route path="/trainers-details" element={<Trainers_details />} />
             <Route path="/photos" element={<Photos />} />
             <Route path="/our-blog" element={<Our_blog />} />
+            <Route path="/blog/:id" element={<Our_blog />} />
             <Route path="/wellness" element={<Wellness />} />
           </Routes>
         </main>
