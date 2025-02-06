@@ -416,7 +416,7 @@ select {
 }
 
 .table-container {
-  max-height: 576px;
+  max-height: 630px;
   overflow-y: auto;
   border: 1px solid #eee;
   border-radius: 5px;
