@@ -223,3 +223,121 @@ body {
         font-size: 1em;
     }
 }
+
+/* personal Blog's data  */
+
+.fit-blog-detail-container {
+    max-width: 1150px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fit-blog-detail-header {
+    margin-bottom: 30px;
+}
+
+.fit-blog-detail-title-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.fit-blog-detail-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.fit-blog-detail-gym {
+    color: #4caf50;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.fit-blog-detail-meta {
+    display: flex;
+    gap: 20px;
+}
+
+.fit-blog-detail-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+}
+
+.fit-blog-detail-icon {
+    font-size: 16px;
+}
+
+.fit-blog-detail-text {
+    font-size: 14px;
+}
+
+.fit-blog-detail-image-container {
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.fit-blog-detail-image {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.fit-blog-detail-content {
+    color: #444;
+    line-height: 1.8;
+}
+
+.fit-blog-detail-paragraph {
+    margin-bottom: 20px;
+}
+
+.fit-blog-detail-back {
+    position: absolute;
+    top: 58px;
+    left: 9px;
+    margin-top: 43px;
+    padding: 12px 24px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.fit-blog-detail-back:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .fit-blog-detail-container {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .fit-blog-detail-title-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .fit-blog-detail-title {
+        font-size: 24px;
+    }
+
+    .fit-blog-detail-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
