@@ -2,14 +2,11 @@
 
 ## [Design Link](https://www.figma.com/design/xx6t46xMZOAVmXsBXRbliP/Ironcore-Gym?node-id=0-1&t=pgF3KdHZajE7uwKu-1)
 
-## [postman documentation Link](https://documenter.getpostman.com/view/39189278/2sAYX3rPFi)
----
+## [Postman documentation Link](https://documenter.getpostman.com/view/39189278/2sAYX3rPFi)
 
-## [Frontend Authentication Link](https://authentication-qi2o.onrender.com)
 
-## [Frontend Main Link](https://ironcore-gym.onrender.com)
+## [Frontend Link](https://ironcore-gym-2.onrender.com)
 
----
 
 ### [Authentication Backend Deployed Link](https://authentication-backend-kbui.onrender.com)
 
