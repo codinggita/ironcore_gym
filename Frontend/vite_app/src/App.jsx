@@ -19,6 +19,9 @@ import ForgotPassword2 from "./Authentication/forgot-password2";
 import ForgotPassword3 from "./Authentication/forgot-password3";
 import ForgotPassword4 from "./Authentication/forgot-password4";
 
+import PassmembershipPlans from "./Membership/pass-membership";
+import FeastmembershipPlans from "./Membership/feast-membership";
+
 import "./App.css";
 
 function App() {
@@ -27,7 +30,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Authentication Pages (Without Navbar & Footer) */}
+        {/* without navbar & footer */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -36,7 +39,7 @@ function App() {
         <Route path="/forgot-password3" element={<ForgotPassword3 />} />
         <Route path="/forgot-password4" element={<ForgotPassword4 />} />
 
-        {/* Protected Pages (With Navbar & Footer) */}
+        {/* with navbar & footer */}
         <Route element={isAuthenticated ? <ProtectedLayout /> : <Navigate to="/login" replace />} >
           <Route path="/home" element={<Home />} />
           <Route path="/service" element={<Service />} />
@@ -47,11 +50,18 @@ function App() {
           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/wellness" element={<Wellness />} />
         </Route>
+
+        {/* with navbar, without footer */}
+        <Route element={<MembershipLayout />}>
+          <Route path="/pass-membership-plans" element={<PassmembershipPlans />} />
+          <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
+        </Route>
       </Routes>
     </Router>
   );
 }
 
+// protected layout with navbar & footer
 const ProtectedLayout = () => {
   return (
     <div className="page-container">
@@ -60,6 +70,18 @@ const ProtectedLayout = () => {
         <Outlet />
       </main>
       <Footer />
+    </div>
+  );
+};
+
+// membership layout with only navbar(no footer)
+const MembershipLayout = () => {
+  return (
+    <div className="membership-page-container">
+      <Navbar />
+      <main className="content-wrap">
+        <Outlet />
+      </main>
     </div>
   );
 };

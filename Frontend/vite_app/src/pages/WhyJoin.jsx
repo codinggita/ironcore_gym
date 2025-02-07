@@ -110,10 +110,8 @@ function WhyJoin() {
             </ul>
           </div>
         </div>
-        <button className="enquire-button">Enquire About Gym Membership Now</button>
+        <button className="enquire-button" onClick={() => window.location.href = '/pass-membership-plans'}>Enquire About Gym Membership Now</button>
       </section>
-      
-
     </>
   );
 }
