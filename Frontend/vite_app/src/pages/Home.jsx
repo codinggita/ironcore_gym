@@ -1,11 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../design/Home.css';
 import gymHero from '../assets/Home-Main.jpg';
 
 const Home = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="home-root">
-
             <section className="home-main-banner">
                 <div className="home-banner-image-wrap">
                     <img
@@ -16,7 +18,7 @@ const Home = () => {
                     <div className="home-banner-overlay">
                         <div className="home-banner-content">
                             <h1>Your Journey to Better Health Starts Here</h1>
-                            <button className="home-cta-btn" onClick={() => window.location.href = '/pass-membership-plans'}>JOIN NOW</button>
+                            <button className="home-cta-btn" onClick={() => navigate('/pass-membership-plans')}>JOIN NOW</button>
                         </div>
                     </div>
                 </div>
