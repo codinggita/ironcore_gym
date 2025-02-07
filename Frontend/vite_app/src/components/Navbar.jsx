@@ -9,7 +9,7 @@ const Navbar = () => {
         <img src={logo} alt="Ironcore Gym" />
       </div>
       <ul className="nav-links">
-        <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink></li>
+        <li><NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink></li>
         <li><NavLink to="/service">Services</NavLink></li>
         <li><NavLink to="/why-join">Why Join</NavLink></li>
         <li><NavLink to="/trainers-details">Trainers Details</NavLink></li>

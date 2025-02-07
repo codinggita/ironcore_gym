@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/create-account.png";
-import "../components/App.css";
+import "../Authentication/App.css";
 
 function Signup() {
   const [formData, setFormData] = useState({

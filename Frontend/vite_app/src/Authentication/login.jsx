@@ -25,7 +25,7 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("userToken", data.token);
-        navigate("/dashboard");
+        navigate("/home"); // Redirect to Home after login
       } else {
         setError(data.message || "Invalid email or password");
       }
