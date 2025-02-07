@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/login.png";
+import backgroundImage from "../assets/Login.png";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -20,12 +20,13 @@ function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
 
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("userToken", data.token);
-        navigate("/dashboard");
+        navigate("/home"); // Redirect to Home after login
       } else {
         setError(data.message || "Invalid email or password");
       }

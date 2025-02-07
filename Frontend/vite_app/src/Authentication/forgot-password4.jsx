@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/for-pass.png';
-import '../components/App.css';
+import '../Authentication/App.css';
 
 function ForgotPassword4() {
   const navigate = useNavigate();
