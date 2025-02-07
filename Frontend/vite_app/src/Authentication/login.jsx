@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/login.png";
+import backgroundImage from "../assets/Login.png";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
