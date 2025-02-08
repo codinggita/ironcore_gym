@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import gymHero from '../assets/why-join.png';
 import supportImage from '../assets/Support-image.png';
 import toolsImage from '../assets/Tools & Training-image.png';
@@ -7,6 +8,8 @@ import communityImage from '../assets/community-image.png';
 import '../design/WhyJoin.css';
 
 function WhyJoin() {
+  const navigate = useNavigate();
+
   return (
     <>
     <section className="hero-section-2">
@@ -24,7 +27,7 @@ function WhyJoin() {
               Supportive community, state-of-the-art equipment, certified trainers, and flexibility.
               Take a step forward toward fitness, anytime.
             </p>
-            <button className="cta-button-2" onClick={() => window.location.href = '/photos'}>
+            <button className="cta-button-2" onClick={() => navigate('/photos')}>
               Visit Gym
             </button>
           </div>
@@ -110,10 +113,8 @@ function WhyJoin() {
             </ul>
           </div>
         </div>
-        <button className="enquire-button">Enquire About Gym Membership Now</button>
+        <button className="enquire-button" onClick={() => navigate('/pass-membership-plans')}>Enquire About Gym Membership Now</button>
       </section>
-      
-
     </>
   );
 }

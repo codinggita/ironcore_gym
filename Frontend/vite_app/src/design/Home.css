@@ -3,24 +3,24 @@
     padding: 0;
 }
 
-.home-container {
+.home-root {
     font-family: 'Arial', sans-serif;
     overflow-x: hidden;
 }
 
-.hero-section {
+.home-main-banner {
     position: relative;
     width: 100%;
     height: 90vh;
 }
 
-.hero-image-container {
+.home-banner-image-wrap {
     position: relative;
     height: 100%;
     width: 100%;
 }
 
-.hero-image {
+.home-banner-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -28,7 +28,7 @@
     object-position: center top;
 }
 
-.hero-overlay {
+.home-banner-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -40,21 +40,21 @@
     justify-content: center;
 }
 
-.hero-content {
+.home-banner-content {
     text-align: center;
     color: white;
     padding: 20px;
     max-width: 800px;
 }
 
-.hero-content h1 {
+.home-banner-content h1 {
     font-size: 2.8rem;
     margin-bottom: 2rem;
     line-height: 1.2;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.cta-button {
+.home-cta-btn {
     background-color: #00BFFF;
     color: white;
     padding: 15px 40px;
@@ -67,24 +67,24 @@
     transition: all 0.3s ease;
 }
 
-.cta-button:hover {
+.home-cta-btn:hover {
     background-color: #009ACD;
     transform: translateY(-2px);
 }
 
-.about-section {
+.home-about-sec {
     padding: 4rem 2rem;
     text-align: center;
     background-color: #f7f7f7;
 }
 
-.about-section h2 {
+.home-about-sec h2 {
     font-size: 2.5rem;
     color: #0D1F35;
     margin-bottom: 2rem;
 }
 
-.about-section p {
+.home-about-sec p {
     font-size: 1.1rem;
     line-height: 1.8;
     color: #444;
@@ -92,19 +92,19 @@
     margin: 0 auto;
 }
 
-.amenities-section {
+.home-facilities-sec {
     padding: 4rem 2rem;
     text-align: center;
     background-color: #ffffff;
 }
 
-.amenities-section h2 {
+.home-facilities-sec h2 {
     font-size: 2.5rem;
     color: #0D1F35;
     margin-bottom: 2rem;
 }
 
-.amenities-grid {
+.home-amenities-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1.2rem;
@@ -112,7 +112,7 @@
     margin: 0 auto;
 }
 
-.amenity-item {
+.home-facility-item {
     background-color: #0D1F35;
     color: white;
     padding: 1.5rem;
@@ -123,17 +123,17 @@
     letter-spacing: 1px;
 }
 
-.fitpass-section {
+.home-membership-sec {
     padding: 4rem 2rem;
     background-color: #ffffff;
 }
 
-.fitpass-content {
+.home-pass-content {
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.fitpass-block {
+.home-pass-block {
     margin-bottom: 3rem;
     padding: 2rem;
     background: #f7f7f7;
@@ -141,7 +141,7 @@
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
-.fitpass-block h2 {
+.home-pass-block h2 {
     color: #0D1F35;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
@@ -149,19 +149,25 @@
     border-bottom: 2px solid #00BFFF;
 }
 
-.fitpass-list {
+.home-benefits-list,
+.home-etiquette-list,
+.home-safety-list {
     list-style: none;
     padding-left: 1.5rem;
 }
 
-.fitpass-list li {
+.home-benefits-list li,
+.home-etiquette-list li,
+.home-safety-list li {
     position: relative;
     margin-bottom: 1rem;
     line-height: 1.6;
     color: #444;
 }
 
-.fitpass-list li::before {
+.home-benefits-list li::before,
+.home-etiquette-list li::before,
+.home-safety-list li::before {
     content: "•";
     color: #00BFFF;
     font-weight: bold;
@@ -170,21 +176,29 @@
     margin-left: -1em;
 }
 
-.fitpass-list.numbered {
+.home-process-list {
     counter-reset: list-counter;
+    list-style: none;
+    padding-left: 1.5rem;
 }
 
-.fitpass-list.numbered li {
+.home-process-list li {
     counter-increment: list-counter;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: #444;
 }
 
-.fitpass-list.numbered li::before {
+.home-process-list li::before {
     content: counter(list-counter) ".";
     color: #00BFFF;
     font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
 }
 
-.fitpass-note {
+.home-pass-note {
     margin-top: 1.5rem;
     font-style: italic;
     color: #666;
@@ -193,33 +207,35 @@
 }
 
 @media (max-width: 768px) {
-    .fitpass-block {
+    .home-pass-block {
         padding: 1.5rem;
         margin-bottom: 2rem;
     }
 
-    .fitpass-block h2 {
+    .home-pass-block h2 {
         font-size: 1.5rem;
     }
 
-    .fitpass-list li {
+    .home-benefits-list li,
+    .home-process-list li,
+    .home-etiquette-list li,
+    .home-safety-list li {
         font-size: 0.95rem;
     }
 }
 
-.hours-contact-section {
+.home-info-sec {
     padding: 4rem 2rem;
     background: #ffffff;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.timings-wrapper,
-.contact-wrapper {
+.home-schedule-wrap {
     margin-bottom: 3rem;
 }
 
-.hours-contact-section h2 {
+.home-info-sec h2 {
     font-size: 2rem;
     color: #0D1F35;
     margin-bottom: 1.5rem;
@@ -227,7 +243,7 @@
     border-bottom: 2px solid #00BFFF;
 }
 
-.day-time {
+.home-day-schedule {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.8rem;
@@ -235,13 +251,13 @@
     border-bottom: 1px solid #ddd;
 }
 
-.contact-wrapper p {
+.home-contact-wrap p {
     margin-bottom: 1rem;
     line-height: 1.5;
     color: #444;
 }
 
-.address {
+.home-postal-address {
     background: #fff;
     padding: 1rem;
     border-radius: 5px;
@@ -249,29 +265,29 @@
 }
 
 @media (max-width: 768px) {
-    .hours-contact-section {
+    .home-info-sec {
         padding: 3rem 1rem;
     }
 
-    .day-time {
+    .home-day-schedule {
         flex-direction: column;
         gap: 0.2rem;
     }
 }
 
-.fitpass-section {
+.home-membership-sec {
     padding: 4rem 2rem;
     background-color: #ffffff;
 }
 
-.fitpass-block.studio-safety {
+.home-pass-block.studio-safety {
     margin-bottom: 1.5rem;
 }
 
-.hours-contact-section .gym-timing-wrapper {
+.home-info-sec .home-schedule-wrap {
     margin-bottom: 4rem;
 }
 
-.hours-contact-section .contact-wrapper {
+.home-info-sec .home-contact-wrap {
     margin-top: 2rem;
 }
