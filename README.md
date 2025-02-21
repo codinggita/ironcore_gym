@@ -4,11 +4,9 @@
 
 ## [Postman documentation Link](https://documenter.getpostman.com/view/39189278/2sAYX3rPFi)
 
-
 ## [Frontend Link](https://ironcore-gym-2.onrender.com)
 
-
-### [Authentication Backend Deployed Link](https://authentication-backend-kbui.onrender.com)
+## [Authentication Backend Deployed Link](https://authentication-backend-kbui.onrender.com)
 
 #### Routes:
 - **Create Account** (POST): `/api/user/signup`  
@@ -30,8 +28,6 @@
 ### [Wellness Backend Deployed Link](https://wellness-backend-bd6i.onrender.com)
 
 #### Routes:
-- **Calculate BMI** (POST): `/calculate-bmi`  
-  URL: [POST - /calculate-bmi](https://wellness-backend-bd6i.onrender.com/calculate-bmi)
 
 - **Submit User Details for Diet Chart** (POST): `/user-details`  
   URL: [POST - /user-details](https://wellness-backend-bd6i.onrender.com/user-details)
