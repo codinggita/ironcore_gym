@@ -3,8 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import '../design/Home.css';
 import gymHero from '../assets/Home-Main.jpg';
 
-const Home = () => {
+const Home = ({ isAuthenticated }) => {
     const navigate = useNavigate();
+
+    const handleJoinNowClick = () => {
+        if (isAuthenticated) {
+            navigate('/pass-membership-plans');
+        } else {
+            navigate('/login', { state: { from: { pathname: '/pass-membership-plans' } } });
+        }
+    };
 
     return (
         <div className="home-root">
@@ -18,7 +26,7 @@ const Home = () => {
                     <div className="home-banner-overlay">
                         <div className="home-banner-content">
                             <h1>Your Journey to Better Health Starts Here</h1>
-                            <button className="home-cta-btn" onClick={() => navigate('/pass-membership-plans')}>JOIN NOW</button>
+                            <button className="home-cta-btn" onClick={handleJoinNowClick}>JOIN NOW</button>
                         </div>
                     </div>
                 </div>

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import backgroundImage from "../assets/Login.png";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,6 +16,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
 //https://authentication-backend-kbui.onrender.com/api/user/signIn
 //http://localhost:5000/api/user/signIn
@@ -30,12 +33,15 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("userToken", data.token);
-        navigate("/home"); // Redirect to Home after login
+        const from = location.state?.from?.pathname || "/home";
+        navigate(from, { replace: true });
       } else {
         setError(data.message || "Invalid email or password");
       }
     } catch (error) {
       setError("Failed to connect to server.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,24 +54,43 @@ function Login() {
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Phone number, username, or E-mail</label>
-            <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} required />
+            <input 
+              type="text" 
+              id="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              required 
+              disabled={isLoading}
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              value={formData.password} 
+              onChange={handleChange} 
+              required 
+              disabled={isLoading}
+            />
           </div>
 
           <div className="form-group remember-me">
             <label>
-              <input type="checkbox" /> Keep me logged in
+              <input type="checkbox" disabled={isLoading} /> Keep me logged in
             </label>
             <Link to="/forgot-password" className="forgot-password">Forgot Password</Link>
           </div>
 
           {error && <p className="error-text">{error}</p>}
 
-          <button type="submit" className="submit-btn">Login</button>
+          <button type="submit" className="submit-btn" disabled={isLoading}>
+            Login
+            {isLoading && <span className="loading-spinner"></span>}
+          </button>
         </form>
 
         <p className="auth-link">Don't have an account? <Link to="/signup">Register</Link></p>
