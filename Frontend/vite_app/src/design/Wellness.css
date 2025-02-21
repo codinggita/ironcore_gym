@@ -2,17 +2,19 @@
   margin-top: 20px;
   margin-left: 20px;
   margin-bottom: 10px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .bmi-head-p {
   margin-left: 20px;
   margin-bottom: 50px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .bmi-calculator {
   max-width: 800px;
   margin: 20px auto;
-  padding: 20px;
+  padding: clamp(15px, 3vw, 20px);
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -20,7 +22,7 @@
 }
 
 .bmi-calculator h1 {
-  font-size: 24px;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: #2c3e50;
   margin-bottom: 15px;
   text-align: center;
@@ -28,7 +30,7 @@
 
 .description {
   color: #7f8c8d;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   text-align: center;
   margin-bottom: 20px;
 }
@@ -38,7 +40,7 @@
 }
 
 .section-title {
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   color: #34495e;
   margin-bottom: 10px;
   font-weight: 600;
@@ -46,8 +48,9 @@
 
 .radio-group {
   display: flex;
-  gap: 20px;
+  gap: clamp(10px, 2vw, 20px);
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .radio-label {
@@ -55,7 +58,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: #34495e;
 }
 
@@ -95,89 +98,77 @@ input[type="radio"]:checked+.radio-custom::after {
 
 .input-group label {
   display: block;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: #34495e;
   margin-bottom: 22px;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px;
+  padding: clamp(8px, 2vw, 10px);
   border: 2px solid #bdc3c7;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: #2c3e50;
   transition: border-color 0.3s ease;
   margin-top: 9px;
 }
 
-.input-group input:focus {
-  border-color: #3498db;
-  outline: none;
-}
-
-.input-group input::placeholder {
-  color: #95a5a6;
-}
-
 .calculate-button {
   display: block;
   width: 100%;
-  padding: 12px;
+  padding: clamp(10px, 2vw, 12px);
   background: #3498db;
   color: #fff;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   cursor: pointer;
   transition: background 0.3s ease;
   margin-bottom: 20px;
-}
-
-.calculate-button:hover {
-  background: #2980b9;
 }
 
 .result {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: clamp(5px, 2vw, 10px);
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .result-label {
-  font-size: 18px;
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
   color: #34495e;
   font-weight: 600;
 }
 
 .bmi-value {
-  font-size: 24px;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 700;
   color: #3498db;
   background: #ecf5ff;
-  padding: 12px 24px;
+  padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
   border-radius: 8px;
 }
 
 .interpretation {
   background: #f9f9f9;
-  padding: 15px;
+  padding: clamp(10px, 2vw, 15px);
   border-radius: 8px;
   margin-bottom: 20px;
   text-align: center;
 }
 
 .interpretation-label {
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   color: #34495e;
   margin-bottom: 5px;
   font-weight: 600;
 }
 
 .interpretation-text {
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: #2ecc71;
   font-weight: 600;
 }
@@ -185,12 +176,12 @@ input[type="radio"]:checked+.radio-custom::after {
 .bmi-status {
   margin-top: 20px;
   background: #ecf5ff;
-  padding: 15px;
+  padding: clamp(10px, 2vw, 15px);
   border-radius: 8px;
 }
 
 .bmi-status h2 {
-  font-size: 20px;
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
   color: #34495e;
   margin-bottom: 15px;
   text-align: center;
@@ -203,51 +194,47 @@ input[type="radio"]:checked+.radio-custom::after {
 }
 
 .bmi-status li {
-  font-size: 14px;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   color: #7f8c8d;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
-}
-
-.status-range {
-  font-weight: 600;
-  color: #34495e;
-  margin-right: 8px;
+  flex-wrap: wrap;
 }
 
 /* Form Styling */
-
 .bmi-head-2 {
   margin-top: 20px;
   margin-left: 20px;
   margin-bottom: 10px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .bmi-head-p-2 {
   margin-left: 20px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .diet-chart-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: clamp(20px, 4vw, 40px) clamp(10px, 2vw, 20px);
 }
 
 .diet-form {
   background-color: #f8f9ff;
-  padding: 30px;
+  padding: clamp(20px, 3vw, 30px);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
 }
 
 .form-group label {
   display: block;
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   color: #333;
   margin-bottom: 8px;
 }
@@ -255,31 +242,20 @@ input[type="radio"]:checked+.radio-custom::after {
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 12px 16px;
-  font-size: 16px;
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 2vw, 16px);
+  font-size: clamp(0.9rem, 2vw, 1rem);
   border: 1px solid #e1e1e1;
   border-radius: 8px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.form-group input::placeholder {
-  color: #999;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #4c6fff;
-  box-shadow: 0 0 0 2px rgba(76, 111, 255, 0.1);
-}
-
 .create-button {
   background-color: #4c6fff;
   color: white;
   border: none;
-  padding: 14px 28px;
-  font-size: 16px;
+  padding: clamp(10px, 2vw, 14px) clamp(20px, 3vw, 28px);
+  font-size: clamp(0.9rem, 2vw, 1rem);
   border-radius: 8px;
   cursor: pointer;
   display: block;
@@ -287,32 +263,11 @@ input[type="radio"]:checked+.radio-custom::after {
   transition: background-color 0.2s;
 }
 
-.create-button:hover {
-  background-color: #3b5bff;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
-}
-
-
 /* Diet chart generator Styling */
-
 .diet-chart-section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: clamp(15px, 2vw, 20px);
   background: #f8f5ff;
   border-radius: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -320,16 +275,27 @@ select {
 
 .main-heading {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   color: #333;
-  margin-bottom: 40px;
+  margin-bottom: clamp(20px, 4vw, 40px);
   line-height: 1.2;
 }
 
 .content-wrapper {
   display: flex;
-  gap: 30px;
-  padding: 30px;
+  gap: clamp(15px, 3vw, 30px);
+  padding: clamp(15px, 3vw, 30px);
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  
+  .form-section {
+    flex: 1;
+  }
 }
 
 .form-section {
@@ -338,7 +304,7 @@ select {
 }
 
 .form-section h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
   color: #333;
   margin-bottom: 15px;
 }
@@ -346,17 +312,18 @@ select {
 .subtitle {
   color: #666;
   margin-bottom: 30px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .form-questions {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(15px, 2vw, 20px);
 }
 
 .question {
   position: relative;
-  padding-left: 40px;
+  padding-left: clamp(30px, 4vw, 40px);
   display: flex;
   align-items: flex-start;
 }
@@ -373,12 +340,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-}
-
-.emoji {
-  font-size: 20px;
-  margin-right: 10px;
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
 }
 
 .label-input {
@@ -390,20 +352,21 @@ select {
   margin-bottom: 8px;
   font-weight: bold;
   color: #333;
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 .question input {
   width: 100%;
-  padding: 10px;
+  padding: clamp(8px, 1.5vw, 10px);
   border: 1px solid #ddd;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
 }
 
 .diet-plan-section {
   flex: 1;
   background: #ffffff;
-  padding: 20px;
+  padding: clamp(15px, 2vw, 20px);
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
@@ -413,6 +376,7 @@ select {
   margin-bottom: 20px;
   line-height: 1.6;
   color: #444;
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 .table-container {
@@ -431,36 +395,43 @@ select {
 .meal-table th {
   background: #6b4de6;
   color: white;
-  padding: 12px;
+  padding: clamp(8px, 1.5vw, 12px);
   text-align: left;
   position: sticky;
   top: 0;
   z-index: 10;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
 }
 
 .meal-table td {
-  padding: 12px;
+  padding: clamp(8px, 1.5vw, 12px);
   border-bottom: 1px solid #eee;
   color: #333;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
 }
 
-.meal-table tr:last-child td {
-  border-bottom: none;
+@media (max-width: 640px) {
+  .meal-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .table-container {
+    max-height: 400px;
+  }
 }
 
-.table-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+@media (max-width: 480px) {
+  .diet-form {
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .create-button {
+    width: 100%;
+  }
 }

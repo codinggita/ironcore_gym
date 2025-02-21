@@ -122,10 +122,107 @@ p {
     color: #666;
 }
 
-/* Adjusting specific trainer images */
 .trainer-image-container img[alt="Jason Parker"],
 .trainer-image-container img[alt="Olivia Kim"],
 .trainer-image-container img[alt="Rachel Collins"] {
     object-position: top;
     transform: scale(1);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .trainers-container {
+        gap: 40px;
+        padding: 40px 15px;
+    }
+
+    .trainer {
+        gap: 40px;
+        padding: 30px;
+    }
+
+    .trainers-heading {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .trainer, .trainer.reverse {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .trainer-image-container {
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+    }
+
+    .trainers-heading {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .trainer-age {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .trainers-container {
+        gap: 30px;
+        padding: 30px 10px;
+    }
+
+    .trainer {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .trainer-image-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .trainers-heading {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    .trainer-social-links {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    .social-link {
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .trainer-age {
+        font-size: 15px;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .trainer-description {
+        margin-bottom: 20px;
+    }
 }
