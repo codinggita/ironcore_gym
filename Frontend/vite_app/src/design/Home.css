@@ -131,6 +131,8 @@
 .home-pass-content {
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .home-pass-block {
@@ -206,29 +208,14 @@
     text-align: center;
 }
 
-@media (max-width: 768px) {
-    .home-pass-block {
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .home-pass-block h2 {
-        font-size: 1.5rem;
-    }
-
-    .home-benefits-list li,
-    .home-process-list li,
-    .home-etiquette-list li,
-    .home-safety-list li {
-        font-size: 0.95rem;
-    }
-}
-
 .home-info-sec {
     padding: 4rem 2rem;
     background: #ffffff;
     max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
 }
 
 .home-schedule-wrap {
@@ -264,30 +251,93 @@
     margin-top: 1rem;
 }
 
+@media (max-width: 1024px) {
+    .home-banner-content h1 {
+        font-size: 2.4rem;
+    }
+
+    .home-about-sec h2,
+    .home-facilities-sec h2 {
+        font-size: 2.2rem;
+    }
+
+    .home-pass-block {
+        padding: 1.5rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .home-main-banner {
+        height: 70vh;
+    }
+
+    .home-banner-content h1 {
+        font-size: 2rem;
+    }
+
+    .home-about-sec,
+    .home-facilities-sec,
+    .home-membership-sec,
     .home-info-sec {
-        padding: 3rem 1rem;
+        padding: 3rem 1.5rem;
+    }
+
+    .home-about-sec h2,
+    .home-facilities-sec h2 {
+        font-size: 2rem;
+    }
+
+    .home-amenities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .home-pass-block {
+        margin-bottom: 2rem;
     }
 
     .home-day-schedule {
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.5rem;
+    }
+
+    .home-info-sec {
+        padding: 3rem 1rem;
     }
 }
 
-.home-membership-sec {
-    padding: 4rem 2rem;
-    background-color: #ffffff;
-}
+@media (max-width: 480px) {
+    .home-main-banner {
+        height: 60vh;
+    }
 
-.home-pass-block.studio-safety {
-    margin-bottom: 1.5rem;
-}
+    .home-banner-content h1 {
+        font-size: 1.8rem;
+    }
 
-.home-info-sec .home-schedule-wrap {
-    margin-bottom: 4rem;
-}
+    .home-cta-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
 
-.home-info-sec .home-contact-wrap {
-    margin-top: 2rem;
+    .home-about-sec h2,
+    .home-facilities-sec h2 {
+        font-size: 1.8rem;
+    }
+
+    .home-about-sec p {
+        font-size: 1rem;
+    }
+
+    .home-facility-item {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .home-pass-block h2 {
+        font-size: 1.5rem;
+    }
+
+    .home-amenities-grid {
+        grid-template-columns: 1fr;
+    }
 }
