@@ -1,55 +1,62 @@
-"use client"
-
-import { useState, useEffect, useRef } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import "../design/Blog.css"
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import "../design/Blog.css";
 
 function Blog() {
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const blogDetailRef = useRef(null)
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const blogDetailRef = useRef(null);
+  const isAuthenticated = !!localStorage.getItem("userToken");
 
   useEffect(() => {
     fetch("https://blogs-backend-i6z7.onrender.com/articles")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok")
+          throw new Error("Network response was not ok");
         }
-        return response.json()
+        return response.json();
       })
       .then((data) => {
-        setArticles(data)
-        setLoading(false)
+        setArticles(data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching articles:", error)
-        setError("Failed to load articles. Please try again later.")
-        setLoading(false)
-      })
-  }, [])
+        console.error("Error fetching articles:", error);
+        setError("Failed to load articles. Please try again later.");
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     if (id && blogDetailRef.current) {
-      blogDetailRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+      blogDetailRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [id])
+  }, [id]);
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    const day = date.getDate()
-    const month = date.toLocaleString("default", { month: "short" })
-    const year = date.getFullYear()
-    return `${day}th ${month} ${year}`
-  }
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+    return `${day}th ${month} ${year}`;
+  };
 
-  // personal Blog's data.
+  const handleReadMore = (articleId) => {
+    if (isAuthenticated) {
+      navigate(`/blog/${articleId}`);
+    } else {
+      navigate('/login', { state: { from: { pathname: `/blog/${articleId}` } } });
+    }
+  };
+
   if (id) {
-    const selectedArticle = articles.find((article) => article._id === id)
+    const selectedArticle = articles.find((article) => article._id === id);
     if (!selectedArticle) {
-      return <div className="fit-error">Article not found</div>
+      return <div className="fit-error">Loading...</div>;
     }
 
     return (
@@ -63,11 +70,15 @@ function Blog() {
           <div className="fit-blog-detail-meta">
             <div className="fit-blog-detail-info">
               <span className="fit-blog-detail-icon">📅</span>
-              <span className="fit-blog-detail-text">{formatDate(selectedArticle.uploaded_date)}</span>
+              <span className="fit-blog-detail-text">
+                {formatDate(selectedArticle.uploaded_date)}
+              </span>
             </div>
             <div className="fit-blog-detail-info">
               <span className="fit-blog-detail-icon">👤</span>
-              <span className="fit-blog-detail-text">{selectedArticle.created_team}</span>
+              <span className="fit-blog-detail-text">
+                {selectedArticle.created_team}
+              </span>
             </div>
           </div>
         </div>
@@ -88,19 +99,24 @@ function Blog() {
               </p>
             ))
           ) : (
-            <p className="fit-blog-detail-paragraph">{selectedArticle.description}</p>
+            <p className="fit-blog-detail-paragraph">
+              {selectedArticle.description}
+            </p>
           )}
         </div>
 
-        <button className="fit-blog-detail-back" onClick={() => navigate("/our-blog")}>
-        ⟵
+        <button
+          className="fit-blog-detail-back"
+          onClick={() => navigate("/our-blog")}
+        >
+          ⟵
         </button>
       </div>
-    )
+    );
   }
 
-  if (loading) return <div className="fit-loading">Loading...</div>
-  if (error) return <div className="fit-error">{error}</div>
+  if (loading) return <div className="fit-loading">Loading...</div>;
+  if (error) return <div className="fit-error">{error}</div>;
 
   return (
     <>
@@ -112,7 +128,11 @@ function Blog() {
           {articles.map((article) => (
             <div key={article._id} className="fit-article">
               <div className="fit-article-imgbox">
-                <img src={article.image_url || "/placeholder.svg"} alt={article.title} className="fit-article-img" />
+                <img
+                  src={article.image_url || "/placeholder.svg"}
+                  alt={article.title}
+                  className="fit-article-img"
+                />
               </div>
 
               <div className="fit-article-content">
@@ -126,7 +146,9 @@ function Blog() {
                   <div className="fit-article-info">
                     <div className="fit-info-item">
                       <span className="fit-info-icon">📅</span>
-                      <span className="fit-info-date">{formatDate(article.uploaded_date)}</span>
+                      <span className="fit-info-date">
+                        {formatDate(article.uploaded_date)}
+                      </span>
                     </div>
                     <div className="fit-info-item">
                       <span className="fit-info-icon">👤</span>
@@ -136,7 +158,10 @@ function Blog() {
 
                   <p className="fit-article-desc">{article.description}</p>
 
-                  <button className="fit-readmore" onClick={() => navigate(`/blog/${article._id}`)}>
+                  <button
+                    className="fit-readmore"
+                    onClick={() => handleReadMore(article._id)}
+                  >
                     READ MORE
                     <span className="fit-readmore-arrow">»</span>
                   </button>
@@ -147,7 +172,7 @@ function Blog() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export default Blog;
