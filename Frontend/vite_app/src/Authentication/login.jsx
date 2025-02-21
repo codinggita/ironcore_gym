@@ -15,7 +15,11 @@ function Login() {
     e.preventDefault();
     setError("");
 
+//https://authentication-backend-kbui.onrender.com/api/user/signIn
+//http://localhost:5000/api/user/signIn
+
     try {
+      // const response = await fetch("http://localhost:5000/api/user/signIn", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
