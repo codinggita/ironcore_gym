@@ -14,8 +14,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 !important;
+  padding: 20px !important;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .signup-content {
@@ -26,12 +27,34 @@ body {
   width: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  margin-left: -800px;
+  margin-left: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 1200px) {
+  .signup-content {
+    margin-left: -800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .signup-content {
+    padding: 30px;
+    border-radius: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-content {
+    padding: 20px;
+    border-radius: 30px;
+  }
 }
 
 .logo {
   text-align: center;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   color: #333;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -39,7 +62,7 @@ body {
 
 .title {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: #444;
   margin-bottom: 30px;
 }
@@ -61,6 +84,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .submit-btn {
@@ -83,6 +107,7 @@ body {
   text-align: center;
   margin-top: 20px;
   color: #666;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .auth-link a {
@@ -93,7 +118,7 @@ body {
 .footer-links {
   text-align: center;
   margin-top: 30px;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   color: #666;
 }
 
@@ -103,11 +128,9 @@ body {
   margin: 0 5px;
 }
 
-
-/* Signup Specific Styles */
-
+/* Signup Styles */
 .terms-text {
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   color: #666;
   margin: 20px 0;
   text-align: center;
@@ -118,15 +141,22 @@ body {
   text-decoration: none;
 }
 
-
-/* Login Specific Styles */
-
+/* Login Styles */
 .remember-me {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 15px 0;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .remember-me {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .remember-me label {
@@ -153,43 +183,34 @@ body {
   text-decoration: underline;
 }
 
-
-/* Forgot Password Specific Styles */
-
+/* Forgot Password Styles */
 .instructions {
   text-align: center;
   color: #666;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   margin: 0 0 20px 0;
   line-height: 1.4;
 }
 
 .new {
   color: #666;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   margin: 0 0 20px 0;
   line-height: 1.4;
 }
 
-.password-reset-notice {
-  text-align: center;
-  color: #666;
-  font-size: 0.9rem;
-  margin: -10px 0 20px 0;
-}
- 
-
-/* Forgot Password 2 Specific Styles */
-
+/* Forgot Password 2 Styles */
 .otp-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .otp-box {
-  width: 40px;
+  width: calc(16.666% - 8px);
+  min-width: 35px;
   height: 40px;
   text-align: center;
   font-size: 1.2rem;
@@ -198,30 +219,32 @@ body {
   margin: 0;
 }
 
+@media (max-width: 380px) {
+  .otp-box {
+    width: calc(33.333% - 7px);
+    margin-bottom: 10px;
+  }
+}
+
 .otp-box:focus {
   border-color: #2c3e50;
   outline: none;
 }
 
-
-/* Forgot Password 4 Specific Styles */
-
+/* Forgot Password 4 Styles */
 .title2 {
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
   text-align: center;
   color: #444;
-  margin-bottom: 30px;
-  margin-top: 60px;
-  margin-bottom: 40px;
+  margin: 60px 0 40px;
 }
 
 .instructions2 {
   text-align: center;
   color: #2c2828;
-  font-size: 1.3rem;
-  margin: 0 0 20px 0;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  margin: 0 0 60px 0;
   line-height: 1.4;
-  margin-bottom: 60px;
 }
 
 .submit-btn2 {
