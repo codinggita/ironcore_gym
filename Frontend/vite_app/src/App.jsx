@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -25,43 +25,59 @@ import FeastmembershipPlans from "./Membership/feast-membership";
 import "./App.css";
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem("userToken");
-
   return (
     <Router>
-      <Routes>
-        {/* Public routes with navbar & footer */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/service" element={<Service />} />
-          <Route path="/why-join" element={<WhyJoin />} />
-          <Route path="/photos" element={<Photos />} />
-          <Route path="/our-blog" element={<Blog />} />
-        </Route>
-
-        {/* Auth routes without navbar & footer */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/forgot-password2" element={<ForgotPassword2 />} />
-        <Route path="/forgot-password3" element={<ForgotPassword3 />} />
-        <Route path="/forgot-password4" element={<ForgotPassword4 />} />
-
-        {/* Protected routes with navbar & footer */}
-        <Route element={isAuthenticated ? <ProtectedLayout /> : <Navigate to="/login" replace />}>
-          <Route path="/trainers-details" element={<TrainersDetails />} />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/wellness" element={<Wellness />} />
-        </Route>
-
-        {/* Protected membership routes with navbar only */}
-        <Route element={isAuthenticated ? <MembershipLayout /> : <Navigate to="/login" replace />}>
-          <Route path="/pass-membership-plans" element={<PassmembershipPlans />} />
-          <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
-        </Route>
-      </Routes>
+      <AppContent />
     </Router>
+  );
+}
+
+function AppContent() {
+  const isAuthenticated = !!localStorage.getItem("userToken");
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    if (token) {
+    }
+  }, [location.pathname]);
+
+  return (
+    <Routes>
+      {/* Public routes with navbar & footer */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<Home isAuthenticated={isAuthenticated} />} />
+        <Route path="/service" element={<Service />} />
+        <Route path="/why-join" element={<WhyJoin />} />
+        <Route path="/photos" element={<Photos />} />
+        <Route path="/our-blog" element={<Blog />} />
+      </Route>
+
+      {/* Auth routes without navbar & footer */}
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+      <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" replace /> : <Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/forgot-password2" element={<ForgotPassword2 />} />
+      <Route path="/forgot-password3" element={<ForgotPassword3 />} />
+      <Route path="/forgot-password4" element={<ForgotPassword4 />} />
+
+      {/* Protected routes with navbar & footer */}
+      <Route element={isAuthenticated ? <ProtectedLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>
+        <Route path="/trainers-details" element={<TrainersDetails />} />
+        <Route path="/blog/:id" element={<Blog />} />
+        <Route path="/wellness" element={<Wellness />} />
+      </Route>
+
+      {/* Protected membership routes with navbar only */}
+      <Route element={isAuthenticated ? <MembershipLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>
+        <Route path="/pass-membership-plans" element={<PassmembershipPlans />} />
+        <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
+      </Route>
+
+      {/* Catch all route for 404 */}
+      <Route path="*" element={<Navigate to="/home" replace />} />
+    </Routes>
   );
 }
 
