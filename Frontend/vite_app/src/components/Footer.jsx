@@ -30,7 +30,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-
                 <div className="sitemap-section">
                     <h3 className="sitemap-heading">SITEMAP</h3>
                     <div className="sitemap-links">
@@ -48,7 +47,6 @@ const Footer = () => {
                         </ul>
                     </div>
                 </div>
-
 
                 <div className="app-social-section">
                     <div className="app-stores">
