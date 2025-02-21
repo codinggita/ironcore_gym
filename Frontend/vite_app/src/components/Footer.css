@@ -1,11 +1,11 @@
-.footer{
+.footer {
     background-color: #000;
     color: #fff;
     padding: 40px 20px;
     margin-top: auto;
 }
 
-.footer-container{
+.footer-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -13,7 +13,6 @@
     gap: 40px;
     flex-wrap: wrap;
 }
-
 
 .logo-address-section {
     flex: 1 1 300px;
@@ -40,7 +39,6 @@
     font-size: 1.1rem;
     color: white;
 }
-
 
 .sitemap-section {
     flex: 1 1 220px;
@@ -76,7 +74,6 @@
     color: #ff4444;
     transform: translateX(5px);
 }
-
 
 .app-social-section {
     flex: 1 1 250px;
@@ -116,7 +113,7 @@
     filter: brightness(1.2);
 }
 
-
+/* Responsive Styles */
 @media (max-width: 992px) {
     .footer-container {
         flex-direction: column;
@@ -140,5 +137,58 @@
 
     .social-icons {
         justify-content: center;
+    }
+}
+
+/* Additional Responsive Breakpoints */
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 15px;
+    }
+
+    .footer-logo {
+        height: 100px;
+    }
+
+    .sitemap-heading {
+        font-size: 1.5rem;
+    }
+
+    .sitemap-item {
+        font-size: 1.1rem;
+        margin: 12px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 25px 10px;
+    }
+
+    .footer-logo {
+        height: 80px;
+    }
+
+    .address-block,
+    .contact-info {
+        font-size: 1rem;
+    }
+
+    .sitemap-heading {
+        font-size: 1.3rem;
+    }
+
+    .sitemap-item {
+        font-size: 1rem;
+        margin: 10px 0;
+    }
+
+    .store-icon {
+        height: 40px;
+    }
+
+    .social-icon {
+        height: 35px;
+        width: 35px;
     }
 }
