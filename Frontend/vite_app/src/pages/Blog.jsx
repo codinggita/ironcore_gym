@@ -4,6 +4,7 @@ import "../design/Blog.css";
 
 function Blog() {
   const [articles, setArticles] = useState([]);
+  const [displayedArticles, setDisplayedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
@@ -11,6 +12,29 @@ function Blog() {
   const location = useLocation();
   const blogDetailRef = useRef(null);
   const isAuthenticated = !!localStorage.getItem("userToken");
+
+  // Function to get current 12-hour period
+  const getTimePeriodSeed = () => {
+    const now = new Date();
+    return Math.floor(now.getTime() / (12 * 60 * 60 * 1000));
+  };
+
+  // Function to shuffle and select articles
+  const updateDisplayedArticles = (allArticles) => {
+    const seed = getTimePeriodSeed();
+    const seededRandom = (max) => {
+      const x = Math.sin(seed + max) * 10000;
+      return Math.floor((x - Math.floor(x)) * max);
+    };
+
+    let shuffledArticles = [...allArticles];
+    for (let i = shuffledArticles.length - 1; i > 0; i--) {
+      const j = seededRandom(i + 1);
+      [shuffledArticles[i], shuffledArticles[j]] = [shuffledArticles[j], shuffledArticles[i]];
+    }
+
+    setDisplayedArticles(shuffledArticles.slice(0, 12));
+  };
 
   useEffect(() => {
     fetch("https://blogs-backend-i6z7.onrender.com/articles")
@@ -22,6 +46,7 @@ function Blog() {
       })
       .then((data) => {
         setArticles(data);
+        updateDisplayedArticles(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -30,6 +55,22 @@ function Blog() {
         setLoading(false);
       });
   }, []);
+
+  // Check and update articles every minute
+  useEffect(() => {
+    const checkAndUpdateArticles = () => {
+      const currentPeriod = getTimePeriodSeed();
+      const lastUpdatePeriod = Number(localStorage.getItem('lastUpdatePeriod'));
+
+      if (currentPeriod !== lastUpdatePeriod) {
+        updateDisplayedArticles(articles);
+        localStorage.setItem('lastUpdatePeriod', currentPeriod.toString());
+      }
+    };
+
+    const interval = setInterval(checkAndUpdateArticles, 60000);
+    return () => clearInterval(interval);
+  }, [articles]);
 
   useEffect(() => {
     if (id && blogDetailRef.current) {
@@ -125,7 +166,7 @@ function Blog() {
 
       <div className="fit-blog">
         <div className="fit-articles">
-          {articles.map((article) => (
+          {displayedArticles.map((article) => (
             <div key={article._id} className="fit-article">
               <div className="fit-article-imgbox">
                 <img
