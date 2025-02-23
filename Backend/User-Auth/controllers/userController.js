@@ -52,7 +52,7 @@ export const signIn = async (req, res) => {
 
 export const sendOTP = async (req, res) => {
   const { email } = req.body;
-
+  
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -60,7 +60,7 @@ export const sendOTP = async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
+    
     otpStore.set(email, {
       otp,
       expiry: Date.now() + 15 * 60 * 1000
@@ -83,7 +83,7 @@ export const sendOTP = async (req, res) => {
 
 export const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
-
+  
   const storedData = otpStore.get(email);
   if (!storedData) {
     return res.status(400).json({ message: "OTP expired or invalid" });
@@ -92,7 +92,6 @@ export const verifyOTP = async (req, res) => {
   if (storedData.otp !== otp || Date.now() > storedData.expiry) {
     return res.status(400).json({ message: "Invalid or expired OTP" });
   }
-
 
   otpStore.delete(email);
   res.json({ message: "OTP verified successfully" });
@@ -110,10 +109,8 @@ export const resetPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    await User.updateOne(
-      { email: email },
-      { $set: { password: hashedPassword } }
-    );
+    user.password = hashedPassword;
+    await user.save();
 
     res.json({ message: "Password reset successful" });
   } catch (error) {
