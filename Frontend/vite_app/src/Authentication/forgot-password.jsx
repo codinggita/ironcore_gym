@@ -13,31 +13,28 @@ function ForgotPassword() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    http:
-
-//http://localhost:5000/api/user/forgot-password
-//https://authentication-backend-kbui.onrender.com/api/user/forgot-password
 
     try {
-      // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        headers: { 
+          "Content-Type": "application/json",
+        },
         credentials: "include",
+        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
       
       if (response.ok) {
-        // Store email for next steps
         sessionStorage.setItem('resetEmail', email);
-        navigate('/forgot-password2');
+        navigate('/one-time-password');
       } else {
-        setError(data.message);
+        setError(data.message || 'Failed to send reset email');
       }
     } catch (error) {
-      setError('Failed to connect to server');
+      console.error('Password reset error:', error);
+      setError('Failed to connect to server. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -52,13 +49,13 @@ function ForgotPassword() {
         <form className="auth-form" onSubmit={handleSubmit}>
           <p className="instructions">
             Enter the email address associated with your account and<br />
-            we'll send you a link to reset your password.
+            we'll send you a code to reset your password.
           </p>
 
           <div className="form-group">
-            <label htmlFor="email">Phone number, E-mail</label>
+            <label htmlFor="email">Email</label>
             <input 
-              type="text" 
+              type="email" 
               id="email" 
               name="email"
               value={email}
@@ -71,8 +68,7 @@ function ForgotPassword() {
           {error && <p className="error-text">{error}</p>}
 
           <div className='new'>
-            If your email address exists in our database, and you haven't requested a password reset in the last 30 minutes, 
-            you will receive a password recovery link at your email address in a few minutes.
+            If your email address exists in our database, you will receive a password reset code at your email address.
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
