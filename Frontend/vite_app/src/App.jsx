@@ -58,9 +58,9 @@ function AppContent() {
       <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
       <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" replace /> : <Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/forgot-password2" element={<ForgotPassword2 />} />
-      <Route path="/forgot-password3" element={<ForgotPassword3 />} />
-      <Route path="/forgot-password4" element={<ForgotPassword4 />} />
+      <Route path="/one-time-password" element={<ForgotPassword2 />} />
+      <Route path="/new-password" element={<ForgotPassword3 />} />
+      <Route path="/all-done" element={<ForgotPassword4 />} />
 
       {/* Protected routes with navbar & footer */}
       <Route element={isAuthenticated ? <ProtectedLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>

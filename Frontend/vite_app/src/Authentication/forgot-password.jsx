@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/for-pass.png';
 import '../Authentication/App.css';
 
 function ForgotPassword() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/forgot-password2');
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        sessionStorage.setItem('resetEmail', email);
+        navigate('/one-time-password');
+      } else {
+        setError(data.message || 'Failed to send reset email');
+      }
+    } catch (error) {
+      console.error('Password reset error:', error);
+      setError('Failed to connect to server. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -20,20 +49,31 @@ function ForgotPassword() {
         <form className="auth-form" onSubmit={handleSubmit}>
           <p className="instructions">
             Enter the email address associated with your account and<br />
-            we'll send you a link to reset your password.
+            we'll send you a code to reset your password.
           </p>
 
           <div className="form-group">
-            <label htmlFor="email">Phone number, E-mail</label>
-            <input type="text" id="email" name="email" />
+            <label htmlFor="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              required 
+            />
           </div>
+
+          {error && <p className="error-text">{error}</p>}
 
           <div className='new'>
-            If your email address exists in our database, and you haven't requested a password reset in the last 30 minutes, 
-            you will receive a password recovery link at your email address in a few minutes.
+            If your email address exists in our database, you will receive a password reset code at your email address.
           </div>
 
-          <button type="submit" className="submit-btn">Send Code</button>
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? 'Sending...' : 'Send Code'}
+          </button>
         </form>
 
         <p className="auth-link">
