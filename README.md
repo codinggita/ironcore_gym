@@ -17,11 +17,27 @@ Ironcore Gym is a comprehensive gym website designed to provide users with all n
 
 ---
 
+## 🔐 Authentication Features
+### User Authentication
+- Secure login with email/username and password
+- "Keep me logged in" functionality for persistent sessions
+- Password visibility toggle for better user experience
+
+### Password Recovery System
+- Email-based password reset
+- 6-digit OTP verification
+- OTP resend functionality with automatic field clearing
+- New password setup with confirmation
+- Success confirmation page
+
 ## 🔐 Authentication API Routes
 | Endpoint                 | Method | Description  |
 |--------------------------|--------|--------------|
 | `/api/user/signup`       | POST   | Create an account |
 | `/api/user/signIn`       | POST   | User login |
+| `/api/user/forgot-password` | POST | Request password reset OTP |
+| `/api/user/verify-otp`   | POST   | Verify reset password OTP |
+| `/api/user/reset-password`| POST   | Set new password |
 
 ---
 
