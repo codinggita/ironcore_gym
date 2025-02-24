@@ -8,6 +8,7 @@ function ForgotPassword2() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
   useEffect(() => {
     const email = sessionStorage.getItem('resetEmail');
@@ -35,6 +36,41 @@ function ForgotPassword2() {
     }
   };
 
+  const handleResendOTP = async () => {
+    const email = sessionStorage.getItem('resetEmail');
+    if (!email) {
+      navigate('/forgot-password');
+      return;
+    }
+
+    setResending(true);
+    setError('');
+
+    try {
+      // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
+      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        credentials: "include"
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setOtp(['', '', '', '', '', '']);
+        const firstInput = document.querySelector('.custom-otp-input');
+        if (firstInput) firstInput.focus();
+      } else {
+        setError(data.message || 'Failed to send new OTP');
+      }
+    } catch (error) {
+      setError('Failed to connect to server');
+    } finally {
+      setResending(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = sessionStorage.getItem('resetEmail');
@@ -50,8 +86,8 @@ function ForgotPassword2() {
 //https://authentication-backend-kbui.onrender.com/api/user/verify-otp
     
     try {
-      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/verify-otp", {
       // const response = await fetch("http://localhost:5000/api/user/verify-otp", {
+      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -122,7 +158,17 @@ function ForgotPassword2() {
         </form>
 
         <p className="auth-link">
-          Didn't receive the code? <Link to="/forgot-password">Try Again</Link>
+          Didn't receive the code?{' '}
+          <Link 
+            to="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              if (!resending) handleResendOTP();
+            }}
+            style={{ cursor: resending ? 'not-allowed' : 'pointer' }}
+          >
+            {resending ? 'Sending...' : 'Send Again'}
+          </Link>
         </p>
 
         <div className="footer-links">
