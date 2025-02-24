@@ -285,3 +285,101 @@ body {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+.custom-otp-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.custom-otp-input {
+  width: 45px !important;
+  height: 45px !important;
+  padding: 0 !important;
+  text-align: center;
+  font-size: 1.25rem !important;
+  font-weight: 500;
+  color: #2c3e50;
+  border: 2px solid #ddd !important;
+  border-radius: 8px !important;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.custom-otp-input:focus {
+  border-color: #2c3e50 !important;
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
+  outline: none;
+}
+
+.custom-otp-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 380px) {
+  .custom-otp-container {
+    gap: 6px;
+  }
+  
+  .custom-otp-input {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.1rem !important;
+  }
+}
+
+.custom-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: customSpin 1s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+@keyframes customSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  padding-right: 40px;
+}
+
+.password-toggle-btn {
+  opacity: 60%;
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.password-toggle-btn:hover {
+  color: #2c3e50;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+}

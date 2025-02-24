@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/Login.png";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,13 +29,16 @@ function Login() {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, keepLoggedIn }),
         credentials: "include",
       });
 
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("userToken", data.token);
+        if (keepLoggedIn) {
+          localStorage.setItem("keepLoggedIn", "true");
+        }
         const from = location.state?.from?.pathname || "/home";
         navigate(from, { replace: true });
       } else {
@@ -67,20 +73,35 @@ function Login() {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              value={formData.password} 
-              onChange={handleChange} 
-              required 
-              disabled={isLoading}
-            />
+            <div className="password-input-container">
+              <input 
+                type={showPassword ? "text" : "password"}
+                id="password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                required 
+                disabled={isLoading}
+              />
+              <button 
+                type="button" 
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={isLoading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="form-group remember-me">
             <label>
-              <input type="checkbox" disabled={isLoading} /> Keep me logged in
+              <input 
+                type="checkbox" 
+                checked={keepLoggedIn}
+                onChange={(e) => setKeepLoggedIn(e.target.checked)}
+                disabled={isLoading}
+              /> Keep me logged in
             </label>
             <Link to="/forgot-password" className="forgot-password">Forgot Password</Link>
           </div>
