@@ -21,8 +21,17 @@ function ForgotPassword2() {
 
     setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
 
-    if (element.nextSibling) {
+    if (element.nextSibling && element.value !== '') {
       element.nextSibling.focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevSibling = e.target.previousSibling;
+      if (prevSibling) {
+        prevSibling.focus();
+      }
     }
   };
 
@@ -39,12 +48,13 @@ function ForgotPassword2() {
 
 //http://localhost:5000/api/user/verify-otp
 //https://authentication-backend-kbui.onrender.com/api/user/verify-otp
-
+    
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/verify-otp", {
+      // const response = await fetch("http://localhost:5000/api/user/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           email,
           otp: otp.join('')
         }),
@@ -52,7 +62,7 @@ function ForgotPassword2() {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         navigate('/new-password');
       } else {
@@ -80,16 +90,17 @@ function ForgotPassword2() {
 
           <div className="form-group">
             <label htmlFor="otp">OTP</label>
-            <div className="otp-container">
+            <div className="custom-otp-container">
               {otp.map((data, index) => {
                 return (
                   <input
                     key={index}
                     type="text"
-                    className="otp-box"
+                    className="custom-otp-input"
                     maxLength="1"
                     value={data}
                     onChange={e => handleChange(e.target, index)}
+                    onKeyDown={e => handleKeyDown(e, index)}
                     onFocus={e => e.target.select()}
                     disabled={loading}
                   />
@@ -99,7 +110,14 @@ function ForgotPassword2() {
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? 'Verifying...' : 'Submit'}
+            {loading ? (
+              <>
+                Verifying...
+                <span className="custom-spinner"></span>
+              </>
+            ) : (
+              'Submit'
+            )}
           </button>
         </form>
 
