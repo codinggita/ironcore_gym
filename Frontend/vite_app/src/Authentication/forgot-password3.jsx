@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from '../assets/for-pass.png';
 import '../Authentication/App.css';
 
@@ -9,6 +10,8 @@ function ForgotPassword3() {
     password: '',
     confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -87,28 +90,48 @@ function ForgotPassword3() {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password"
-              value={passwords.password}
-              onChange={handleChange}
-              disabled={loading}
-              required
-            />
+            <div className="password-input-container">
+              <input 
+                type={showPassword ? "text" : "password"}
+                id="password" 
+                name="password"
+                value={passwords.password}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+              <button 
+                type="button" 
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="confirm-password">Confirm Password</label>
-            <input 
-              type="password" 
-              id="confirm-password" 
-              name="confirmPassword"
-              value={passwords.confirmPassword}
-              onChange={handleChange}
-              disabled={loading}
-              required
-            />
+            <div className="password-input-container">
+              <input 
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirm-password" 
+                name="confirmPassword"
+                value={passwords.confirmPassword}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+              <button 
+                type="button" 
+                className="password-toggle-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                disabled={loading}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/Login.png";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -67,15 +69,25 @@ function Login() {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              value={formData.password} 
-              onChange={handleChange} 
-              required 
-              disabled={isLoading}
-            />
+            <div className="password-input-container">
+              <input 
+                type={showPassword ? "text" : "password"}
+                id="password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                required 
+                disabled={isLoading}
+              />
+              <button 
+                type="button" 
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={isLoading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="form-group remember-me">

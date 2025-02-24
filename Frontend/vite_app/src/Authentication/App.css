@@ -346,3 +346,40 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  padding-right: 40px;
+}
+
+.password-toggle-btn {
+  opacity: 60%;
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.password-toggle-btn:hover {
+  color: #2c3e50;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+}
