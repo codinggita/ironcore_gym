@@ -19,6 +19,7 @@ function ForgotPassword() {
     
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
+      // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
