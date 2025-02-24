@@ -4,37 +4,38 @@ import backgroundImage from '../assets/for-pass.png';
 import '../Authentication/App.css';
 
 function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
+    
+    //http://localhost:5000/api/user/forgot-password
+    //https://authentication-backend-kbui.onrender.com/api/user/forgot-password
+    
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
+        credentials: "include"
       });
 
       const data = await response.json();
       
       if (response.ok) {
+        // Store email for next steps
         sessionStorage.setItem('resetEmail', email);
         navigate('/one-time-password');
       } else {
-        setError(data.message || 'Failed to send reset email');
+        setError(data.message || 'Failed to send OTP');
       }
     } catch (error) {
-      console.error('Password reset error:', error);
-      setError('Failed to connect to server. Please try again later.');
+      setError('Failed to connect to server');
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,6 @@ function ForgotPassword() {
             <input 
               type="email" 
               id="email" 
-              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
@@ -68,7 +68,7 @@ function ForgotPassword() {
           {error && <p className="error-text">{error}</p>}
 
           <div className='new'>
-            If your email address exists in our database, you will receive a password reset code at your email address.
+            If your email address exists in our database, you will receive a password recovery code at your email address in a few minutes.
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>

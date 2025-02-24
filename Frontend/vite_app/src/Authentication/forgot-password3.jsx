@@ -1,66 +1,67 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/for-pass.png';
 import '../Authentication/App.css';
 
 function ForgotPassword3() {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+  const [passwords, setPasswords] = useState({
     password: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const email = sessionStorage.getItem('resetEmail');
+    if (!email) {
+      navigate('/forgot-password');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setPasswords({
+      ...passwords,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const email = sessionStorage.getItem('resetEmail');
+    
+    if (passwords.password !== passwords.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (passwords.password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
     setError('');
     setLoading(true);
-
-    const email = sessionStorage.getItem('resetEmail');
-    if (!email) {
-      setError('Session expired. Please start over.');
-      navigate('/forgot-password');
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long');
-      setLoading(false);
-      return;
-    }
 
 //https://authentication-backend-kbui.onrender.com/api/user/reset-password
 //http://localhost:5000/api/user/reset-password
 
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/reset-password", {
-      // const response = await fetch("http://localhost:5000/api/user/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          password: formData.password
+          password: passwords.password
         }),
-        credentials: "include",
+        credentials: "include"
       });
 
       const data = await response.json();
       
       if (response.ok) {
-        // Clear the stored email
         sessionStorage.removeItem('resetEmail');
-        navigate('/forgot-password4');
+        navigate('/all-done');
       } else {
         setError(data.message || 'Failed to reset password');
       }
@@ -82,35 +83,33 @@ function ForgotPassword3() {
             It must be at least 8 characters.
           </p>
 
+          {error && <p className="error-text">{error}</p>}
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input 
               type="password" 
               id="password" 
               name="password"
-              value={formData.password}
+              value={passwords.password}
               onChange={handleChange}
               disabled={loading}
               required
-              minLength={8}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirm-password">Confirm Password</label>
             <input 
               type="password" 
-              id="confirmPassword" 
+              id="confirm-password" 
               name="confirmPassword"
-              value={formData.confirmPassword}
+              value={passwords.confirmPassword}
               onChange={handleChange}
               disabled={loading}
               required
-              minLength={8}
             />
           </div>
-
-          {error && <p className="error-text">{error}</p>}
 
           <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? 'Resetting...' : 'Reset Password'}

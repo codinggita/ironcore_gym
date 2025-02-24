@@ -16,15 +16,24 @@ app.use(cookieParser());
 //http://localhost:5173
 //https://ironcore-gym-2.onrender.com
 
-const corsOptions = {
-  origin: "https://ironcore-gym-2.onrender.com",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["set-cookie"]
-};
+app.use(
+  cors({
+    // origin: "http://localhost:5173",
+    origin: "https://ironcore-gym-2.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  // res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Origin", "https://ironcore-gym-2.onrender.com");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.use("/api/user", userRoutes);
 
