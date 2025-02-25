@@ -17,7 +17,8 @@ function ForgotPassword3() {
 
   useEffect(() => {
     const email = sessionStorage.getItem('resetEmail');
-    if (!email) {
+    const resetToken = sessionStorage.getItem('resetToken');
+    if (!email || !resetToken) {
       navigate('/forgot-password');
     }
   }, [navigate]);
@@ -32,6 +33,7 @@ function ForgotPassword3() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = sessionStorage.getItem('resetEmail');
+    const resetToken = sessionStorage.getItem('resetToken');
     
     if (passwords.password !== passwords.confirmPassword) {
       setError('Passwords do not match');
@@ -46,15 +48,13 @@ function ForgotPassword3() {
     setError('');
     setLoading(true);
 
-//https://authentication-backend-kbui.onrender.com/api/user/reset-password
-//http://localhost:5000/api/user/reset-password
-
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/reset-password", {
+      // const response = await fetch("http://localhost:5000/api/user/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
+          resetToken,
           password: passwords.password
         }),
         credentials: "include"
@@ -64,6 +64,7 @@ function ForgotPassword3() {
       
       if (response.ok) {
         sessionStorage.removeItem('resetEmail');
+        sessionStorage.removeItem('resetToken');
         navigate('/all-done');
       } else {
         setError(data.message || 'Failed to reset password');
