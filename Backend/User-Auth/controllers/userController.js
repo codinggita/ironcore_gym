@@ -28,7 +28,7 @@ export const initiateSignUp = async (req, res) => {
   });
 
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
-  const verificationLink = `https://authentication-backend-kbui.onrender.com/verify-email/${verificationToken}`;
+  const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
