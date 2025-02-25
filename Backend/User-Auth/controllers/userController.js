@@ -28,7 +28,7 @@ export const initiateSignUp = async (req, res) => {
   });
 
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
-  const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}`;
+  const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -46,8 +46,11 @@ export const initiateSignUp = async (req, res) => {
       html: `
         <h2>Welcome to IRONCORE GYM!</h2>
         <p>Please click the link below to verify your email address:</p>
-        <a href="${verificationLink}">Click On This Link To Verify Email</a>
+        <a href="${verificationLink}" onclick="window.location.href='${verificationLink}'; return false;">Click On This Link To Verify Email</a>
         <p>This link will expire in 30 minutes.</p>
+        <script>
+          window.location.href = '${verificationLink}';
+        </script>
       `
     });
 
@@ -94,17 +97,7 @@ export const verifyEmail = async (req, res) => {
       expiresIn: "7d" 
     });
 
-    res.status(201)
-      .cookie("token", token, { 
-        httpOnly: true, 
-        sameSite: "None", 
-        secure: true 
-      })
-      .json({ 
-        success: true, 
-        message: "Email verified and account created successfully", 
-        token 
-      });
+    res.redirect(`https://ironcore-gym-2.onrender.com/login?token=${token}`);
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: "Error creating user" });

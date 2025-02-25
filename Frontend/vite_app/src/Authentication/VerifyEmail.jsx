@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import backgroundImage from '../assets/create-account.png';
 import '../Authentication/App.css';
 
@@ -8,32 +8,29 @@ function VerifyEmail() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { token } = useParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await fetch(`https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
+        const urlToken = searchParams.get('token');
+        if (urlToken) {
+          localStorage.setItem("userToken", urlToken);
           setMessage('Email verified successfully! Redirecting to login page...');
           setTimeout(() => {
             navigate('/login');
           }, 3000);
-        } else {
-          setError(data.message || 'Email verification failed');
+          return;
         }
+
+        setError('Invalid verification link or token missing');
       } catch (error) {
-        setError('Failed to connect to server');
+        setError('Failed to connect to server or invalid verification');
       }
     };
 
     verifyEmail();
-  }, [token, navigate]);
+  }, [token, navigate, searchParams]);
 
   return (
     <div className="signup-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
