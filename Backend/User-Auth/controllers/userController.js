@@ -28,7 +28,7 @@ export const initiateSignUp = async (req, res) => {
   });
 
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
-  const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}`;
+  const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -54,7 +54,7 @@ export const initiateSignUp = async (req, res) => {
       `
     });
 
-    res.json({ message: "Verification email sent successfully" });
+    res.json({ message: "A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.", email });
   } catch (error) {
     console.error('Error sending verification email:', error);
     res.status(500).json({ message: "Error sending verification email" });
@@ -63,41 +63,45 @@ export const initiateSignUp = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { token } = req.params;
+  const { email } = req.query;
   
+  if (!email || !token) {
+    return res.status(400).json({ message: "Invalid or missing verification details" });
+  }
+
   let userData = null;
-  let userEmail = null;
   
-  for (const [email, data] of tempUsers.entries()) {
-    if (data.verificationToken === token) {
+  for (const [userEmail, data] of tempUsers.entries()) {
+    if (userEmail === email && data.verificationToken === token) {
       userData = data;
-      userEmail = email;
       break;
     }
   }
 
-  if (!userData || !userEmail) {
+  if (!userData) {
     return res.status(400).json({ message: "Invalid or expired verification link" });
   }
 
   if (new Date() - userData.createdAt > 30 * 60 * 1000) {
-    tempUsers.delete(userEmail);
+    tempUsers.delete(email);
     return res.status(400).json({ message: "Verification link expired" });
   }
 
   try {
     const user = await User.create({ 
-      email: userEmail, 
+      email: email, 
       password: userData.password,
       isVerified: true
     });
 
-    tempUsers.delete(userEmail);
+    tempUsers.delete(email);
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { 
       expiresIn: "7d" 
     });
 
-    res.redirect(`https://ironcore-gym-2.onrender.com/login?token=${token}`);
+    // Redirect to the frontend signup page with success message and token
+    res.redirect(`https://ironcore-gym-2.onrender.com/signup?verified=true&token=${token}&email=${encodeURIComponent(email)}`);
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: "Error creating user" });

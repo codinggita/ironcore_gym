@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/create-account.png";
 import "../Authentication/App.css";
@@ -16,6 +16,21 @@ function Signup() {
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const verified = searchParams.get("verified");
+    const token = searchParams.get("token");
+    const email = searchParams.get("email");
+
+    if (verified === "true" && token && email) {
+      localStorage.setItem("userToken", token);
+      setSuccess(`Account successfully verified for ${email}! You can now log in.`);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
+  }, [searchParams, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
