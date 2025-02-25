@@ -47,8 +47,8 @@ function ForgotPassword2() {
     setError('');
 
     try {
-      // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
+      // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -81,13 +81,10 @@ function ForgotPassword2() {
 
     setError('');
     setLoading(true);
-
-//http://localhost:5000/api/user/verify-otp
-//https://authentication-backend-kbui.onrender.com/api/user/verify-otp
     
     try {
-      // const response = await fetch("http://localhost:5000/api/user/verify-otp", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/verify-otp", {
+      // const response = await fetch("http://localhost:5000/api/user/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -100,6 +97,7 @@ function ForgotPassword2() {
       const data = await response.json();
 
       if (response.ok) {
+        sessionStorage.setItem('resetToken', data.resetToken);
         navigate('/new-password');
       } else {
         setError(data.message || 'Invalid OTP');
@@ -119,7 +117,7 @@ function ForgotPassword2() {
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <p className="instructions">
-            We sent a code to your email
+            Enter the 6-digit OTP sent to your email
           </p>
 
           {error && <p className="error-text">{error}</p>}
@@ -152,13 +150,13 @@ function ForgotPassword2() {
                 <span className="custom-spinner"></span>
               </>
             ) : (
-              'Submit'
+              'Verify OTP'
             )}
           </button>
         </form>
 
         <p className="auth-link">
-          Didn't receive the code?{' '}
+          Didn't receive the OTP?{' '}
           <Link 
             to="#" 
             onClick={(e) => {
@@ -167,7 +165,7 @@ function ForgotPassword2() {
             }}
             style={{ cursor: resending ? 'not-allowed' : 'pointer' }}
           >
-            {resending ? 'Sending...' : 'Send Again'}
+            {resending ? 'Sending...' : 'Resend OTP'}
           </Link>
         </p>
 
