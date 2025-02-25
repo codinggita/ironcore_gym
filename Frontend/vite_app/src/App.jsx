@@ -13,6 +13,7 @@ import Blog from "./pages/Blog";
 import Wellness from "./pages/Wellness";
 
 import Signup from "./Authentication/signup";
+import Otp from "./Authentication/otp";
 import Login from "./Authentication/login";
 import ForgotPassword from "./Authentication/forgot-password";
 import ForgotPassword2 from "./Authentication/forgot-password2";
@@ -57,6 +58,7 @@ function AppContent() {
       {/* Auth routes without navbar & footer */}
       <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
       <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" replace /> : <Signup />} />
+      <Route path="/otp" element={< Otp/>} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/one-time-password" element={<ForgotPassword2 />} />
       <Route path="/new-password" element={<ForgotPassword3 />} />
