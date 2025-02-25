@@ -13,7 +13,8 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,11 +24,12 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    setSuccess("");
+    setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -42,17 +44,14 @@ function Signup() {
 
       const data = await response.json();
       if (response.ok) {
-        // Store email for OTP verification
-        sessionStorage.setItem('signupEmail', formData.email);
-        sessionStorage.setItem('signupPassword', formData.password);
-        navigate('/otp');
+        setSuccess("A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.");
       } else {
         setError(data.message || "Something went wrong.");
       }
     } catch (error) {
       setError("Failed to connect to server.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -72,7 +71,7 @@ function Signup() {
               value={formData.email} 
               onChange={handleChange} 
               required 
-              disabled={loading}
+              disabled={isLoading}
             />
           </div>
 
@@ -86,13 +85,13 @@ function Signup() {
                 value={formData.password} 
                 onChange={handleChange} 
                 required 
-                disabled={loading}
+                disabled={isLoading}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
-                disabled={loading}
+                disabled={isLoading}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -109,13 +108,13 @@ function Signup() {
                 value={formData.confirmPassword} 
                 onChange={handleChange} 
                 required 
-                disabled={loading}
+                disabled={isLoading}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={loading}
+                disabled={isLoading}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -123,16 +122,17 @@ function Signup() {
           </div>
 
           {error && <p className="error-text">{error}</p>}
+          {success && <p className="success-text">{success}</p>}
 
           <p className="terms-text">
             When you click Create account, you agree with our <a href="/terms">Terms and Conditions</a>, and confirm that
             you've read our <a href="/privacy">Privacy Policy</a>.
           </p>
 
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? (
+          <button type="submit" className="submit-btn" disabled={isLoading}>
+            {isLoading ? (
               <>
-                Sending OTP...
+                Sending Verification Email...
                 <span className="loading-spinner"></span>
               </>
             ) : (
