@@ -26,7 +26,7 @@ export const initiateSignUp = async (req, res) => {
     verificationToken,
     createdAt: new Date()
   });
-
+  
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
   const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
@@ -44,17 +44,31 @@ export const initiateSignUp = async (req, res) => {
       to: email,
       subject: 'Email Verification - IRONCORE GYM',
       html: `
-        <h2>Welcome to IRONCORE GYM!</h2>
-        <p>Please click the link below to verify your email address:</p>
-        <a href="${verificationLink}" onclick="window.location.href='${verificationLink}'; return false;">Click On This Link To Verify Email</a>
-        <p>This link will expire in 30 minutes.</p>
-        <script>
-          window.location.href = '${verificationLink}';
-        </script>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333; text-align: center;">Welcome to IRONCORE GYM!</h2>
+          <div style="background-color: #f8f8f8; padding: 20px; border-radius: 8px;">
+            <p style="color: #555;">Please click the button below to verify your email address:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationLink}" 
+                 style="background-color: #4CAF50; color: white; padding: 12px 25px; 
+                        text-decoration: none; border-radius: 4px; display: inline-block;">
+                Verify Email Address
+              </a>
+            </div>
+            <p style="color: #666; font-size: 14px;">This link will expire in 30 minutes.</p>
+            <p style="color: #888; font-size: 12px;">If the button doesn't work, copy and paste this link into your browser:</p>
+            <p style="background-color: #eee; padding: 10px; word-break: break-all; font-size: 12px;">
+              ${verificationLink}
+            </p>
+          </div>
+        </div>
       `
     });
 
-    res.json({ message: "A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.", email });
+    res.json({ 
+      success: true,
+      message: "Verification email sent! Please check your inbox (and spam folder) to verify your account. You'll be redirected to login after verification." 
+    });
   } catch (error) {
     console.error('Error sending verification email:', error);
     res.status(500).json({ message: "Error sending verification email" });
@@ -66,7 +80,10 @@ export const verifyEmail = async (req, res) => {
   const { email } = req.query;
   
   if (!email || !token) {
-    return res.status(400).json({ message: "Invalid or missing verification details" });
+    return res.status(400).json({ 
+      success: false,
+      message: "Invalid verification link" 
+    });
   }
 
   let userData = null;
@@ -79,12 +96,18 @@ export const verifyEmail = async (req, res) => {
   }
 
   if (!userData) {
-    return res.status(400).json({ message: "Invalid or expired verification link" });
+    return res.status(400).json({ 
+      success: false,
+      message: "Invalid or expired verification link" 
+    });
   }
 
   if (new Date() - userData.createdAt > 30 * 60 * 1000) {
     tempUsers.delete(email);
-    return res.status(400).json({ message: "Verification link expired" });
+    return res.status(400).json({ 
+      success: false,
+      message: "Verification link has expired" 
+    });
   }
 
   try {
@@ -100,11 +123,17 @@ export const verifyEmail = async (req, res) => {
       expiresIn: "7d" 
     });
 
-    // Redirect to the frontend signup page with success message and token
-    res.redirect(`https://ironcore-gym-2.onrender.com/signup?verified=true&token=${token}&email=${encodeURIComponent(email)}`);
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      token
+    });
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(500).json({ message: "Error creating user" });
+    res.status(500).json({ 
+      success: false,
+      message: "Error verifying email. Please try again." 
+    });
   }
 };
 
