@@ -1,7 +1,7 @@
 import express from "express";
 import {
   initiateSignUp,
-  verifySignUpOTP,
+  verifyEmail,
   signIn,
   forgotPassword,
   verifyOTP,
@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.post("/initiate-signup", initiateSignUp);
-router.post("/verify-signup-otp", verifySignUpOTP);
+router.get("/verify-email/:token", verifyEmail);
 router.post("/signin", signIn);
 router.post("/forgot-password", forgotPassword);
 router.post("/verify-otp", verifyOTP);

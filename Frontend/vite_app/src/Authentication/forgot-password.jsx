@@ -14,9 +14,6 @@ function ForgotPassword() {
     setError('');
     setLoading(true);
     
-    //http://localhost:5000/api/user/forgot-password
-    //https://authentication-backend-kbui.onrender.com/api/user/forgot-password
-    
     try {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/forgot-password", {
       // const response = await fetch("http://localhost:5000/api/user/forgot-password", {
@@ -29,7 +26,6 @@ function ForgotPassword() {
       const data = await response.json();
       
       if (response.ok) {
-        // Store email for next steps
         sessionStorage.setItem('resetEmail', email);
         navigate('/one-time-password');
       } else {
@@ -51,7 +47,7 @@ function ForgotPassword() {
         <form className="auth-form" onSubmit={handleSubmit}>
           <p className="instructions">
             Enter the email address associated with your account and<br />
-            we'll send you a code to reset your password.
+            we'll send you an OTP to reset your password.
           </p>
 
           <div className="form-group">
@@ -69,11 +65,11 @@ function ForgotPassword() {
           {error && <p className="error-text">{error}</p>}
 
           <div className='new'>
-            If your email address exists in our database, you will receive a password recovery code at your email address in a few minutes.
+            If your email address exists in our database, you will receive a password recovery OTP at your email address in a few minutes.
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? 'Sending...' : 'Send Code'}
+            {loading ? 'Sending...' : 'Send OTP'}
           </button>
         </form>
 

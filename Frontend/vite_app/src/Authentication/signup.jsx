@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/create-account.png";
 import "../Authentication/App.css";
@@ -13,8 +13,25 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const verified = searchParams.get("verified");
+    const token = searchParams.get("token");
+    const email = searchParams.get("email");
+
+    if (verified === "true" && token && email) {
+      localStorage.setItem("userToken", token);
+      setSuccess("Account successfully verified! Redirecting to login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
+  }, [searchParams, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,11 +40,12 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    setSuccess("");
+    setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -42,17 +60,20 @@ function Signup() {
 
       const data = await response.json();
       if (response.ok) {
-        // Store email for OTP verification
-        sessionStorage.setItem('signupEmail', formData.email);
-        sessionStorage.setItem('signupPassword', formData.password);
-        navigate('/otp');
+        setVerificationSent(true);
+        setSuccess("A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.");
+        setFormData({
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
       } else {
         setError(data.message || "Something went wrong.");
       }
     } catch (error) {
       setError("Failed to connect to server.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -72,7 +93,7 @@ function Signup() {
               value={formData.email} 
               onChange={handleChange} 
               required 
-              disabled={loading}
+              disabled={isLoading || verificationSent}
             />
           </div>
 
@@ -86,13 +107,13 @@ function Signup() {
                 value={formData.password} 
                 onChange={handleChange} 
                 required 
-                disabled={loading}
+                disabled={isLoading || verificationSent}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
-                disabled={loading}
+                disabled={isLoading || verificationSent}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -109,13 +130,13 @@ function Signup() {
                 value={formData.confirmPassword} 
                 onChange={handleChange} 
                 required 
-                disabled={loading}
+                disabled={isLoading || verificationSent}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={loading}
+                disabled={isLoading || verificationSent}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -123,18 +144,25 @@ function Signup() {
           </div>
 
           {error && <p className="error-text">{error}</p>}
+          {success && <p className="success-text">{success}</p>}
 
           <p className="terms-text">
             When you click Create account, you agree with our <a href="/terms">Terms and Conditions</a>, and confirm that
             you've read our <a href="/privacy">Privacy Policy</a>.
           </p>
 
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? (
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isLoading || verificationSent}
+          >
+            {isLoading ? (
               <>
-                Sending OTP...
+                Sending Verification Email...
                 <span className="loading-spinner"></span>
               </>
+            ) : verificationSent ? (
+              'Verification Email Sent'
             ) : (
               'Create Account'
             )}
