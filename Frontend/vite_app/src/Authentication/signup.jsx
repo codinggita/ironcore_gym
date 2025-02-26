@@ -15,6 +15,7 @@ function Signup() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -25,10 +26,10 @@ function Signup() {
 
     if (verified === "true" && token && email) {
       localStorage.setItem("userToken", token);
-      setSuccess(`Account successfully verified for ${email}! You can now log in.`);
+      setSuccess("Account successfully verified! Redirecting to login...");
       setTimeout(() => {
         navigate("/login");
-      }, 3000);
+      }, 2000);
     }
   }, [searchParams, navigate]);
 
@@ -59,7 +60,13 @@ function Signup() {
 
       const data = await response.json();
       if (response.ok) {
+        setVerificationSent(true);
         setSuccess("A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.");
+        setFormData({
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
       } else {
         setError(data.message || "Something went wrong.");
       }
@@ -86,7 +93,7 @@ function Signup() {
               value={formData.email} 
               onChange={handleChange} 
               required 
-              disabled={isLoading}
+              disabled={isLoading || verificationSent}
             />
           </div>
 
@@ -100,13 +107,13 @@ function Signup() {
                 value={formData.password} 
                 onChange={handleChange} 
                 required 
-                disabled={isLoading}
+                disabled={isLoading || verificationSent}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
-                disabled={isLoading}
+                disabled={isLoading || verificationSent}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -123,13 +130,13 @@ function Signup() {
                 value={formData.confirmPassword} 
                 onChange={handleChange} 
                 required 
-                disabled={isLoading}
+                disabled={isLoading || verificationSent}
               />
               <button 
                 type="button" 
                 className="password-toggle-btn"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isLoading}
+                disabled={isLoading || verificationSent}
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -144,12 +151,18 @@ function Signup() {
             you've read our <a href="/privacy">Privacy Policy</a>.
           </p>
 
-          <button type="submit" className="submit-btn" disabled={isLoading}>
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isLoading || verificationSent}
+          >
             {isLoading ? (
               <>
                 Sending Verification Email...
                 <span className="loading-spinner"></span>
               </>
+            ) : verificationSent ? (
+              'Verification Email Sent'
             ) : (
               'Create Account'
             )}
