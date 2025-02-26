@@ -26,7 +26,7 @@ export const initiateSignUp = async (req, res) => {
     verificationToken,
     createdAt: new Date()
   });
-  
+
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
   const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
@@ -126,6 +126,7 @@ export const verifyEmail = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
+      message: "Now you can login.",
       token
     });
   } catch (error) {
