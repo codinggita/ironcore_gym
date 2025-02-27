@@ -2,18 +2,10 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import crypto from "crypto";
-import mongoose from "mongoose";
+import crypto from 'crypto';
 
-// Define TempUser schema for storing temporary signup data
-const tempUserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  verificationToken: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now, expires: "30m" } // Auto-expire after 30 minutes
-});
-
-const TempUser = mongoose.model("TempUser", tempUserSchema);
+const tempUsers = new Map();
+const tempOTPs = new Map();
 
 export const initiateSignUp = async (req, res) => {
   const { email, password, confirmPassword } = req.body;
@@ -27,40 +19,40 @@ export const initiateSignUp = async (req, res) => {
     return res.status(400).json({ message: "User Already Exists" });
   }
 
-  const verificationToken = crypto.randomBytes(32).toString("hex");
-
-  // Save to TempUser collection instead of Map
-  await TempUser.create({
-    email,
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+  
+  tempUsers.set(email, {
     password,
     verificationToken,
+    createdAt: new Date()
   });
 
+  // Use deployed frontend and backend URLs
   const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
   const backendVerificationEndpoint = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
+      pass: process.env.EMAIL_PASS
+    }
   });
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Email Verification - IRONCORE GYM",
+      subject: 'Email Verification - IRONCORE GYM',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; text-align: center;">Welcome to IRONCORE GYM!</h2>
           <div style="background-color: #f8f8f8; padding: 20px; border-radius: 8px;">
             <p style="color: #555;">Please click the button below to verify your email address:</p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${verificationLink}"
-                style="background-color: #4CAF50; color: white; padding: 12px 25px;
-                  text-decoration: none; border-radius: 4px; display: inline-block;">
+              <a href="${verificationLink}" 
+                 style="background-color: #4CAF50; color: white; padding: 12px 25px; 
+                        text-decoration: none; border-radius: 4px; display: inline-block;">
                 Verify Email Address
               </a>
             </div>
@@ -71,16 +63,15 @@ export const initiateSignUp = async (req, res) => {
             </p>
           </div>
         </div>
-      `,
+      `
     });
 
-    res.json({
+    res.json({ 
       success: true,
-      message:
-        "Verification email sent! Please check your inbox (and spam folder) to verify your account. You'll be redirected to login after verification.",
+      message: "Verification email sent! Please check your inbox (and spam folder) to verify your account. You'll be redirected to login after verification." 
     });
   } catch (error) {
-    console.error("Error sending verification email:", error);
+    console.error('Error sending verification email:', error);
     res.status(500).json({ message: "Error sending verification email" });
   }
 };
@@ -88,53 +79,65 @@ export const initiateSignUp = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   const { token } = req.params;
   const { email } = req.query;
-
+  
   if (!email || !token) {
-    return res.status(400).json({
+    return res.status(400).json({ 
       success: false,
-      message: "Invalid verification link",
+      message: "Invalid verification link" 
     });
   }
 
-  // Find temp user in MongoDB
-  const tempUser = await TempUser.findOne({ email, verificationToken: token });
+  let userData = null;
+  
+  for (const [userEmail, data] of tempUsers.entries()) {
+    if (userEmail === email && data.verificationToken === token) {
+      userData = data;
+      break;
+    }
+  }
 
-  if (!tempUser) {
-    return res.status(400).json({
+  if (!userData) {
+    return res.status(400).json({ 
       success: false,
-      message: "Invalid or expired verification link",
+      message: "Invalid or expired verification link" 
     });
   }
 
-  // No need to check expiry manually since MongoDB handles it with TTL
+  if (new Date() - userData.createdAt > 30 * 60 * 1000) {
+    tempUsers.delete(email);
+    return res.status(400).json({ 
+      success: false,
+      message: "Verification link has expired" 
+    });
+  }
+
   try {
-    const user = await User.create({
-      email: tempUser.email,
-      password: tempUser.password,
-      isVerified: true,
+    const user = await User.create({ 
+      email: email, 
+      password: userData.password,
+      isVerified: true
     });
 
-    await TempUser.deleteOne({ _id: tempUser._id });
+    tempUsers.delete(email);
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { 
+      expiresIn: "7d" 
     });
 
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
-      token,
+      token
     });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({
+    console.error('Error creating user:', error);
+    res.status(500).json({ 
       success: false,
-      message: "Error verifying email. Please try again.",
+      message: "Error verifying email. Please try again." 
     });
   }
 };
 
-// Rest of the controllers remain unchanged
 export const signIn = async (req, res) => {
   const { email, password } = req.body;
 
@@ -166,37 +169,36 @@ export const forgotPassword = async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-    const tempOTPs = new Map(); // Keeping this as Map since forgot password works fine
+    
     tempOTPs.set(email, {
       otp,
-      createdAt: new Date(),
+      createdAt: new Date()
     });
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+        pass: process.env.EMAIL_PASS
+      }
     });
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Password Reset OTP - IRONCORE GYM",
+      subject: 'Password Reset OTP - IRONCORE GYM',
       html: `
         <h2>Password Reset Request</h2>
         <p>Your One-Time Password (OTP) for password reset is:</p>
         <h3>${otp}</h3>
         <p>This OTP will expire in 15 minutes.</p>
         <p>If you didn't request this, please ignore this email.</p>
-      `,
+      `
     });
 
     res.json({ message: "OTP sent to your email successfully" });
   } catch (error) {
-    console.error("Forgot password error:", error);
+    console.error('Forgot password error:', error);
     res.status(500).json({ message: "Error sending OTP" });
   }
 };
@@ -204,7 +206,6 @@ export const forgotPassword = async (req, res) => {
 export const verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    const tempOTPs = new Map(); // Keeping this as Map since it works
     const otpData = tempOTPs.get(email);
 
     if (!otpData) {
@@ -220,12 +221,12 @@ export const verifyOTP = async (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetToken = crypto.randomBytes(32).toString('hex');
     tempOTPs.set(email, { ...otpData, resetToken });
 
-    res.json({
+    res.json({ 
       message: "OTP verified successfully",
-      resetToken,
+      resetToken 
     });
   } catch (error) {
     res.status(500).json({ message: "Error verifying OTP" });
@@ -235,11 +236,10 @@ export const verifyOTP = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const { resetToken, password } = req.body;
-
-    const tempOTPs = new Map(); // Keeping this as Map since it works
+    
     let userEmail = null;
     let otpData = null;
-
+    
     for (const [email, data] of tempOTPs.entries()) {
       if (data.resetToken === resetToken) {
         userEmail = email;
@@ -276,15 +276,15 @@ export const resetPassword = async (req, res) => {
 export const getUserInfo = async (req, res) => {
   try {
     const userId = req.user._id;
-    const user = await User.findById(userId).select("-password");
-
+    const user = await User.findById(userId).select('-password');
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    
     res.json(user);
   } catch (error) {
-    console.error("Error fetching user info:", error);
+    console.error('Error fetching user info:', error);
     res.status(500).json({ message: "Error fetching user information" });
   }
 };
