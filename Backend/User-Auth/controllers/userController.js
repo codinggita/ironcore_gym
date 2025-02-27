@@ -27,8 +27,9 @@ export const initiateSignUp = async (req, res) => {
     createdAt: new Date()
   });
 
-  // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
-  const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
+  // Use deployed frontend and backend URLs
+  const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
+  const backendVerificationEndpoint = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -126,7 +127,6 @@ export const verifyEmail = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
-      message: "Now you can login.",
       token
     });
   } catch (error) {
@@ -270,5 +270,21 @@ export const resetPassword = async (req, res) => {
     res.json({ message: "Password reset successful" });
   } catch (error) {
     res.status(500).json({ message: "Error resetting password" });
+  }
+};
+
+export const getUserInfo = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+    res.status(500).json({ message: "Error fetching user information" });
   }
 };

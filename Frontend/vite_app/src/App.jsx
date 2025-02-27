@@ -11,6 +11,7 @@ import TrainersDetails from "./pages/TrainersDetails";
 import Photos from "./pages/Photos";
 import Blog from "./pages/Blog";
 import Wellness from "./pages/Wellness";
+import Review from "./pages/Review";
 
 import Signup from "./Authentication/signup";
 import Login from "./Authentication/login";
@@ -53,6 +54,7 @@ function AppContent() {
         <Route path="/why-join" element={<WhyJoin />} />
         <Route path="/photos" element={<Photos />} />
         <Route path="/our-blog" element={<Blog />} />
+        <Route path="/review" element={<Review />} />
       </Route>
 
       {/* Auth routes without navbar & footer */}

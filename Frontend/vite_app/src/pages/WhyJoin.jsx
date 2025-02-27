@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Star } from 'lucide-react';
 import gymHero from '../assets/why-join.png';
 import supportImage from '../assets/Support-image.png';
 import toolsImage from '../assets/Tools & Training-image.png';
@@ -12,31 +13,40 @@ function WhyJoin() {
 
   return (
     <>
-    <section className="hero-section-2">
-      <div className="hero-image-container-2">
-        <img
-          src={gymHero}
-          alt="Gym Interior"
-          className="hero-image-2"
-        />
-        <div className="hero-overlay-2">
-          <div className="hero-content-2">
-            <h1>WHY JOIN IRONCORE GYM?</h1>
-            <p className='ridham'>
-              Ironcore gym membership offers a comprehensive fitness journey to every individual.
-              Supportive community, state-of-the-art equipment, certified trainers, and flexibility.
-              Take a step forward toward fitness, anytime.
-            </p>
-            <button className="cta-button-2" onClick={() => navigate('/photos')}>
-              Visit Gym
-            </button>
+      <section className="hero-section-2">
+        <div className="hero-image-container-2">
+          <img
+            src={gymHero}
+            alt="Gym Interior"
+            className="hero-image-2"
+          />
+          <div className="hero-overlay-2">
+            <div className="hero-content-2">
+              <h1>WHY JOIN IRONCORE GYM?</h1>
+              <p className='ridham'>
+                Ironcore gym membership offers a comprehensive fitness journey to every individual.
+                Supportive community, state-of-the-art equipment, certified trainers, and flexibility.
+                Take a step forward toward fitness, anytime.
+              </p>
+              <div className="hero-buttons">
+                <button className="cta-button-2" onClick={() => navigate('/photos')}>
+                  Visit Gym
+                </button>
+                <button 
+                  className="cta-button-2 review-btn" 
+                  onClick={() => navigate('/review')}
+                >
+                  <Star className="star-icon" />
+                  Member Reviews
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="features-section">
-      <h1>WHY CHOOSE IRONCORE GYM MEMBERSHIP</h1>
+      <section className="features-section">
+        <h1>WHY CHOOSE IRONCORE GYM MEMBERSHIP</h1>
         <div className="feature">
           <img src={supportImage} alt="Support" />
           <h2>Support</h2>
@@ -68,7 +78,7 @@ function WhyJoin() {
       </section>
 
       <section className="membership-section">
-      <h1>Ironcore Gym Membership Offers</h1>
+        <h1>Ironcore Gym Membership Offers</h1>
         <div className="membership-container">
           <div className="membership-column">
             <h2>Equipment</h2>
@@ -113,7 +123,9 @@ function WhyJoin() {
             </ul>
           </div>
         </div>
-        <button className="enquire-button" onClick={() => navigate('/pass-membership-plans')}>Enquire About Gym Membership Now</button>
+        <button className="enquire-button" onClick={() => navigate('/pass-membership-plans')}>
+          Enquire About Gym Membership Now
+        </button>
       </section>
     </>
   );
