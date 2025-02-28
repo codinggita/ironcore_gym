@@ -14,6 +14,12 @@ function VerifyEmail() {
 
   useEffect(() => {
     const verifyEmail = async () => {
+      if (!token || !email) {
+        setStatus('error');
+        setMessage('Invalid verification link. Missing token or email.');
+        return;
+      }
+
       try {
         const response = await fetch(
           `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}?email=${encodeURIComponent(email)}`,
@@ -42,17 +48,13 @@ function VerifyEmail() {
           setMessage(data.message || 'Verification failed. Please try again.');
         }
       } catch (error) {
+        console.error('Verification error:', error);
         setStatus('error');
         setMessage('An error occurred during verification. Please try again.');
       }
     };
 
-    if (token && email) {
-      verifyEmail();
-    } else {
-      setStatus('error');
-      setMessage('Invalid verification link.');
-    }
+    verifyEmail();
   }, [token, email, navigate]);
 
   const renderIcon = () => {

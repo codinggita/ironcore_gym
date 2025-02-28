@@ -50,7 +50,6 @@ function Signup() {
     }
 
     try {
-      // const response = await fetch("http://localhost:5000/api/user/initiate-signup", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/initiate-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -71,6 +70,7 @@ function Signup() {
         setError(data.message || "Something went wrong.");
       }
     } catch (error) {
+      console.error("Signup error:", error);
       setError("Failed to connect to server.");
     } finally {
       setIsLoading(false);
