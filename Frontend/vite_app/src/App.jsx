@@ -61,6 +61,7 @@ function AppContent() {
       <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
       <Route path="/signup" element={isAuthenticated ? <Navigate to="/home" replace /> : <Signup />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/one-time-password" element={<ForgotPassword2 />} />
       <Route path="/new-password" element={<ForgotPassword3 />} />
