@@ -10,9 +10,10 @@ function VerifyEmail() {
   const navigate = useNavigate();
   const { token: paramToken } = useParams();
   const [searchParams] = useSearchParams();
-  const queryToken = searchParams.get('token');
   const email = searchParams.get('email');
-  const token = paramToken || queryToken;
+  
+  // Get token from URL path parameter
+  const token = paramToken;
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -23,7 +24,7 @@ function VerifyEmail() {
       }
 
       try {
-        console.log(`Verifying email with token: ${token} and email: ${email}`);
+        // Make API call to verify email
         const response = await fetch(
           `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}?email=${encodeURIComponent(email)}`,
           {
@@ -36,7 +37,6 @@ function VerifyEmail() {
         );
 
         const data = await response.json();
-        console.log("Verification response:", data);
 
         if (response.ok && data.success) {
           setStatus('success');
