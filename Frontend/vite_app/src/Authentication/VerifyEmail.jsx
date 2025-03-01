@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import backgroundImage from '../assets/create-account.png';
 import '../Authentication/App.css';
@@ -9,65 +9,51 @@ function VerifyEmail() {
   const [message, setMessage] = useState('Verifying your email...');
   const navigate = useNavigate();
   const { token } = useParams();
-  const location = useLocation();
-  
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get('email');
+
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        // Parse the email from the URL query parameters
-        const searchParams = new URLSearchParams(location.search);
-        const email = searchParams.get('email');
-        
-        if (!token || !email) {
-          console.error('Missing token or email', { token, email });
-          setStatus('error');
-          setMessage('Invalid verification link. Missing token or email.');
-          return;
-        }
-
-        console.log(`Attempting to verify email: ${email} with token: ${token}`);
-        
         const response = await fetch(
           `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}?email=${encodeURIComponent(email)}`,
           {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include',
           }
         );
 
         const data = await response.json();
-        console.log("Verification response:", data);
 
         if (response.ok && data.success) {
           setStatus('success');
           setMessage('Email verified successfully!');
-          
-          // Store the token in localStorage
-          if (data.token) {
-            localStorage.setItem('userToken', data.token);
-            console.log('Token saved to localStorage');
-          }
+          localStorage.setItem('userToken', data.token);
           
           // Redirect to login after 3 seconds
           setTimeout(() => {
             navigate('/login');
           }, 3000);
         } else {
-          console.error('Verification failed', data);
           setStatus('error');
           setMessage(data.message || 'Verification failed. Please try again.');
         }
       } catch (error) {
-        console.error('Verification error:', error);
         setStatus('error');
         setMessage('An error occurred during verification. Please try again.');
       }
     };
 
-    verifyEmail();
-  }, [token, location.search, navigate]);
+    if (token && email) {
+      verifyEmail();
+    } else {
+      setStatus('error');
+      setMessage('Invalid verification link.');
+    }
+  }, [token, email, navigate]);
 
   const renderIcon = () => {
     switch (status) {

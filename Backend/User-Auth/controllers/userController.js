@@ -21,17 +21,14 @@ export const initiateSignUp = async (req, res) => {
 
   const verificationToken = crypto.randomBytes(32).toString('hex');
   
-  // Store the plain password - it will be hashed in the User model's pre-save hook
   tempUsers.set(email, {
     password,
     verificationToken,
     createdAt: new Date()
   });
 
-  console.log(`Stored verification token for ${email}: ${verificationToken}`);
-
-  // Use deployed frontend URL
-  const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
+  // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
+  const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -82,39 +79,30 @@ export const verifyEmail = async (req, res) => {
   const { token } = req.params;
   const { email } = req.query;
   
-  console.log(`Verification request received - Token: ${token}, Email: ${email}`);
-  
   if (!email || !token) {
-    console.log("Missing email or token");
     return res.status(400).json({ 
       success: false,
       message: "Invalid verification link" 
     });
   }
 
-  // Check if the user data exists in the tempUsers map
-  if (!tempUsers.has(email)) {
-    console.log(`No temporary user found for email: ${email}`);
+  let userData = null;
+  
+  for (const [userEmail, data] of tempUsers.entries()) {
+    if (userEmail === email && data.verificationToken === token) {
+      userData = data;
+      break;
+    }
+  }
+
+  if (!userData) {
     return res.status(400).json({ 
       success: false,
       message: "Invalid or expired verification link" 
     });
   }
-  
-  const userData = tempUsers.get(email);
-  
-  // Check if the token matches
-  if (userData.verificationToken !== token) {
-    console.log(`Token mismatch for ${email}. Expected: ${userData.verificationToken}, Got: ${token}`);
-    return res.status(400).json({ 
-      success: false,
-      message: "Invalid verification token" 
-    });
-  }
 
-  // Check if the token has expired (30 minutes)
   if (new Date() - userData.createdAt > 30 * 60 * 1000) {
-    console.log(`Token expired for ${email}`);
     tempUsers.delete(email);
     return res.status(400).json({ 
       success: false,
@@ -123,20 +111,14 @@ export const verifyEmail = async (req, res) => {
   }
 
   try {
-    // Create the user in the database
-    const user = new User({ 
+    const user = await User.create({ 
       email: email, 
-      password: userData.password, // Password will be hashed by the pre-save hook
+      password: userData.password,
       isVerified: true
     });
-    
-    await user.save();
-    console.log(`User created successfully: ${user._id}`);
 
-    // Remove the temporary user data
     tempUsers.delete(email);
 
-    // Generate JWT token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { 
       expiresIn: "7d" 
     });
@@ -144,6 +126,7 @@ export const verifyEmail = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
+      message: "Now you can login.",
       token
     });
   } catch (error) {
@@ -287,21 +270,5 @@ export const resetPassword = async (req, res) => {
     res.json({ message: "Password reset successful" });
   } catch (error) {
     res.status(500).json({ message: "Error resetting password" });
-  }
-};
-
-export const getUserInfo = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const user = await User.findById(userId).select('-password');
-    
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    
-    res.json(user);
-  } catch (error) {
-    console.error('Error fetching user info:', error);
-    res.status(500).json({ message: "Error fetching user information" });
   }
 };

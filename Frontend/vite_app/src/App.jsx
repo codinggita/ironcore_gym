@@ -39,10 +39,8 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    // Check if token exists and is valid
     const token = localStorage.getItem("userToken");
     if (token) {
-      // Token validation is handled by protected routes
     }
   }, [location.pathname]);
 
