@@ -21,12 +21,8 @@ function Login() {
     setError("");
     setIsLoading(true);
 
-//https://authentication-backend-kbui.onrender.com/api/user/signIn
-//http://localhost:5000/api/user/signIn
-
     try {
-      // const response = await fetch("http://localhost:5000/api/user/signIn", {
-      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signIn", {
+      const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, keepLoggedIn }),
