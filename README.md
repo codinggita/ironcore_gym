@@ -10,10 +10,12 @@ Ironcore Gym is an all-in-one fitness platform that eliminates the need for phys
 - 🚀 **[Explore the Live Gym Experience](https://ironcore-gym-2.onrender.com)**
 - 📜 **[Postman API Documentation](https://documenter.getpostman.com/view/39189278/2sAYX3rPFi)**
 
+
 ### ⚙️ Backend Services:
 - 🔐 **Authentication**: [Live API](https://authentication-backend-kbui.onrender.com)
 - 📝 **Blogs**: [Live API](https://blogs-backend-i6z7.onrender.com)
 - 🏋️ **Wellness**: [Live API](https://wellness-backend-bd6i.onrender.com)
+- ⭐ **Review**: [Live API](https://review-backend-i98k.onrender.com)
 
 ---
 
@@ -53,6 +55,14 @@ Ironcore Gym is an all-in-one fitness platform that eliminates the need for phys
 | `/user-details`               | POST   | Submit user details for diet plan |
 | `/get-user-details/{id}`       | GET    | Retrieve user diet data |
 
+## ⭐ Review API Routes
+| 🛠 Endpoint                 | 🔄 Method | 🔍 Description  |
+|----------------------------|---------|--------------|
+| `/api/reviews`       | GET   | Fetch Reviews |
+| `/api/reviews`       | POST   | Add New Review |
+| `/api/reviews/{id}` | PUT | Update an existing review |
+| `/api/reviews/{id}`   | DELETE   | Delete an existing review |
+
 ---
 
 ## 🎯 Problem Statement
@@ -82,6 +92,7 @@ Some platforms like **Mepack** offer similar services but lack a seamless and us
 - 🎯 Gym Photos  
 - 🎯 Blog Section  
 - 🎯 BMI Calculator & AI-Generated Diet Plans  
+- 🎯 Review Section
 
 ---
 
