@@ -19,12 +19,13 @@ function VerifyEmail() {
         const email = searchParams.get('email');
         
         if (!token || !email) {
+          console.error('Missing token or email', { token, email });
           setStatus('error');
           setMessage('Invalid verification link. Missing token or email.');
           return;
         }
 
-        console.log(`Verifying email with token: ${token} and email: ${email}`);
+        console.log(`Attempting to verify email: ${email} with token: ${token}`);
         
         const response = await fetch(
           `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}?email=${encodeURIComponent(email)}`,
@@ -47,6 +48,7 @@ function VerifyEmail() {
           // Store the token in localStorage
           if (data.token) {
             localStorage.setItem('userToken', data.token);
+            console.log('Token saved to localStorage');
           }
           
           // Redirect to login after 3 seconds
@@ -54,6 +56,7 @@ function VerifyEmail() {
             navigate('/login');
           }, 3000);
         } else {
+          console.error('Verification failed', data);
           setStatus('error');
           setMessage(data.message || 'Verification failed. Please try again.');
         }

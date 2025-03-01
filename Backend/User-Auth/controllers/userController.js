@@ -21,13 +21,19 @@ export const initiateSignUp = async (req, res) => {
 
   const verificationToken = crypto.randomBytes(32).toString('hex');
   
+  // Hash the password before storing it in tempUsers
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  
   tempUsers.set(email, {
-    password,
+    password: hashedPassword,
     verificationToken,
     createdAt: new Date()
   });
 
-  // Use deployed frontend and backend URLs
+  console.log(`Stored verification token for ${email}: ${verificationToken}`);
+
+  // Use deployed frontend URL
   const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
@@ -89,27 +95,29 @@ export const verifyEmail = async (req, res) => {
     });
   }
 
-  let userData = null;
-  
   // Check if the user data exists in the tempUsers map
-  if (tempUsers.has(email)) {
-    userData = tempUsers.get(email);
-    if (userData.verificationToken !== token) {
-      console.log("Token mismatch");
-      userData = null;
-    }
-  }
-
-  if (!userData) {
-    console.log("User data not found or token mismatch");
+  if (!tempUsers.has(email)) {
+    console.log(`No temporary user found for email: ${email}`);
     return res.status(400).json({ 
       success: false,
       message: "Invalid or expired verification link" 
     });
   }
+  
+  const userData = tempUsers.get(email);
+  
+  // Check if the token matches
+  if (userData.verificationToken !== token) {
+    console.log(`Token mismatch for ${email}. Expected: ${userData.verificationToken}, Got: ${token}`);
+    return res.status(400).json({ 
+      success: false,
+      message: "Invalid verification token" 
+    });
+  }
 
+  // Check if the token has expired (30 minutes)
   if (new Date() - userData.createdAt > 30 * 60 * 1000) {
-    console.log("Token expired");
+    console.log(`Token expired for ${email}`);
     tempUsers.delete(email);
     return res.status(400).json({ 
       success: false,
@@ -121,7 +129,7 @@ export const verifyEmail = async (req, res) => {
     // Create the user in the database
     const user = new User({ 
       email: email, 
-      password: userData.password,
+      password: userData.password, // Password is already hashed
       isVerified: true
     });
     
