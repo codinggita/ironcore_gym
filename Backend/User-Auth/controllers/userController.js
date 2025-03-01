@@ -21,12 +21,9 @@ export const initiateSignUp = async (req, res) => {
 
   const verificationToken = crypto.randomBytes(32).toString('hex');
   
-  // Hash the password before storing it in tempUsers
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  
+  // Store the plain password - it will be hashed in the User model's pre-save hook
   tempUsers.set(email, {
-    password: hashedPassword,
+    password,
     verificationToken,
     createdAt: new Date()
   });
@@ -129,7 +126,7 @@ export const verifyEmail = async (req, res) => {
     // Create the user in the database
     const user = new User({ 
       email: email, 
-      password: userData.password, // Password is already hashed
+      password: userData.password, // Password will be hashed by the pre-save hook
       isVerified: true
     });
     
