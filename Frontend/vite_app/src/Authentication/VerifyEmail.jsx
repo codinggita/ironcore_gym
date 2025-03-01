@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import backgroundImage from '../assets/create-account.png';
 import '../Authentication/App.css';
@@ -8,22 +8,24 @@ function VerifyEmail() {
   const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'error'
   const [message, setMessage] = useState('Verifying your email...');
   const navigate = useNavigate();
-  const { token: paramToken } = useParams();
-  const [searchParams] = useSearchParams();
-  const queryToken = searchParams.get('token');
-  const email = searchParams.get('email');
-  const token = paramToken || queryToken;
-
+  const { token } = useParams();
+  const location = useLocation();
+  
   useEffect(() => {
     const verifyEmail = async () => {
-      if (!token || !email) {
-        setStatus('error');
-        setMessage('Invalid verification link. Missing token or email.');
-        return;
-      }
-
       try {
+        // Parse the email from the URL query parameters
+        const searchParams = new URLSearchParams(location.search);
+        const email = searchParams.get('email');
+        
+        if (!token || !email) {
+          setStatus('error');
+          setMessage('Invalid verification link. Missing token or email.');
+          return;
+        }
+
         console.log(`Verifying email with token: ${token} and email: ${email}`);
+        
         const response = await fetch(
           `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${token}?email=${encodeURIComponent(email)}`,
           {
@@ -41,7 +43,11 @@ function VerifyEmail() {
         if (response.ok && data.success) {
           setStatus('success');
           setMessage('Email verified successfully!');
-          localStorage.setItem('userToken', data.token);
+          
+          // Store the token in localStorage
+          if (data.token) {
+            localStorage.setItem('userToken', data.token);
+          }
           
           // Redirect to login after 3 seconds
           setTimeout(() => {
@@ -59,7 +65,7 @@ function VerifyEmail() {
     };
 
     verifyEmail();
-  }, [token, email, navigate]);
+  }, [token, location.search, navigate]);
 
   const renderIcon = () => {
     switch (status) {

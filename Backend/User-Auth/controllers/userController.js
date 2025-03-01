@@ -29,7 +29,6 @@ export const initiateSignUp = async (req, res) => {
 
   // Use deployed frontend and backend URLs
   const verificationLink = `https://ironcore-gym-2.onrender.com/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
-  const backendVerificationEndpoint = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -80,7 +79,10 @@ export const verifyEmail = async (req, res) => {
   const { token } = req.params;
   const { email } = req.query;
   
+  console.log(`Verification request received - Token: ${token}, Email: ${email}`);
+  
   if (!email || !token) {
+    console.log("Missing email or token");
     return res.status(400).json({ 
       success: false,
       message: "Invalid verification link" 
@@ -89,14 +91,17 @@ export const verifyEmail = async (req, res) => {
 
   let userData = null;
   
-  for (const [userEmail, data] of tempUsers.entries()) {
-    if (userEmail === email && data.verificationToken === token) {
-      userData = data;
-      break;
+  // Check if the user data exists in the tempUsers map
+  if (tempUsers.has(email)) {
+    userData = tempUsers.get(email);
+    if (userData.verificationToken !== token) {
+      console.log("Token mismatch");
+      userData = null;
     }
   }
 
   if (!userData) {
+    console.log("User data not found or token mismatch");
     return res.status(400).json({ 
       success: false,
       message: "Invalid or expired verification link" 
@@ -104,6 +109,7 @@ export const verifyEmail = async (req, res) => {
   }
 
   if (new Date() - userData.createdAt > 30 * 60 * 1000) {
+    console.log("Token expired");
     tempUsers.delete(email);
     return res.status(400).json({ 
       success: false,
@@ -112,14 +118,20 @@ export const verifyEmail = async (req, res) => {
   }
 
   try {
-    const user = await User.create({ 
+    // Create the user in the database
+    const user = new User({ 
       email: email, 
       password: userData.password,
       isVerified: true
     });
+    
+    await user.save();
+    console.log(`User created successfully: ${user._id}`);
 
+    // Remove the temporary user data
     tempUsers.delete(email);
 
+    // Generate JWT token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { 
       expiresIn: "7d" 
     });
