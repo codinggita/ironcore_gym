@@ -53,7 +53,7 @@ function Signup() {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/initiate-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
