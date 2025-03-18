@@ -1,4 +1,4 @@
-.app-container {
+.workoutMasterWrapper {
   font-family: 'Arial', sans-serif;
   display: flex;
   height: calc(100vh - 60px); /* Adjust for footer height */
@@ -9,7 +9,7 @@
   background-color: #f9f9f9;
 }
 
-.input-section {
+.workoutInputPanel {
   flex: 1;
   padding: 30px;
   background-color: #ffffff;
@@ -18,14 +18,14 @@
   overflow-y: auto;
 }
 
-.output-section {
+.workoutResultPanel {
   flex: 1;
   padding: 30px;
   background-color: #f4f4f4;
   overflow-y: auto;
 }
 
-.form-group {
+.workoutFormUnit {
   margin-bottom: 20px;
   width: 100%;
   max-width: 400px;
@@ -50,7 +50,7 @@ select[multiple] {
   height: 150px; /* Increased height for more equipment options */
 }
 
-button {
+.workoutGenerateBtn {
   padding: 12px;
   width: 100%;
   max-width: 400px;
@@ -64,17 +64,17 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.workoutGenerateBtn:hover {
   background-color: #45a049;
 }
 
-.loading {
+.workoutLoadingText {
   margin-top: 20px;
   color: #666;
   font-style: italic;
 }
 
-.result {
+.workoutOutputBox {
   margin-top: 20px;
   padding: 20px;
   border: 1px solid #ddd;
