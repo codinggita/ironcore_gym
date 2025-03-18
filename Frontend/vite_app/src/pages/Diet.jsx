@@ -2,7 +2,6 @@ import { useState } from 'react';
 import '../design/Diet.css';
 
 function Diet() {
-  // Debugging environment variables
   console.log('All env vars:', import.meta.env);
   const ACCESS_TOKEN = import.meta.env.VITE_HUGGING_FACE_TOKEN;
   console.log('ACCESS_TOKEN:', ACCESS_TOKEN);
@@ -12,7 +11,7 @@ function Diet() {
     experience: 'beginner',
     location: 'home',
     equipment: ['none'],
-    days: 7, // Default to 7 days
+    days: 7,
   });
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
@@ -86,11 +85,11 @@ function Diet() {
   };
 
   return (
-    <div className="app-container">
-      <div className="input-section">
+    <div className="workoutMasterWrapper">
+      <div className="workoutInputPanel">
         <h1>Workout Plan Generator</h1>
 
-        <div className="form-group">
+        <div className="workoutFormUnit">
           <label htmlFor="goal">Fitness Goal:</label>
           <select name="goal" value={formData.goal} onChange={handleInputChange}>
             <option value="weight_loss">Weight Loss</option>
@@ -102,7 +101,7 @@ function Diet() {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="workoutFormUnit">
           <label htmlFor="experience">Experience Level:</label>
           <select name="experience" value={formData.experience} onChange={handleInputChange}>
             <option value="beginner">Beginner</option>
@@ -112,7 +111,7 @@ function Diet() {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="workoutFormUnit">
           <label htmlFor="location">Workout Preference:</label>
           <select name="location" value={formData.location} onChange={handleInputChange}>
             <option value="home">Home</option>
@@ -122,7 +121,7 @@ function Diet() {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="workoutFormUnit">
           <label htmlFor="days">Plan Duration (Days):</label>
           <select name="days" value={formData.days} onChange={handleInputChange}>
             <option value="7">7 Days</option>
@@ -134,7 +133,7 @@ function Diet() {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="workoutFormUnit">
           <label htmlFor="equipment">Available Equipment (Ctrl+Click for multiple):</label>
           <select
             name="equipment"
@@ -156,13 +155,13 @@ function Diet() {
           </select>
         </div>
 
-        <button onClick={generatePlan}>Generate Workout Plan</button>
-        {loading && <div className="loading">Generating your plan... Please wait</div>}
+        <button className="workoutGenerateBtn" onClick={generatePlan}>Generate Workout Plan</button>
+        {loading && <div className="workoutLoadingText">Generating your plan... Please wait</div>}
       </div>
 
-      <div className="output-section">
+      <div className="workoutResultPanel">
         {result && (
-          <div className="result">
+          <div className="workoutOutputBox">
             <pre>{result}</pre>
           </div>
         )}
