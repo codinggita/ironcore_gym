@@ -1,0 +1,57 @@
+.container {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  select {
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  select[multiple] {
+    height: 100px;
+  }
+  
+  button {
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .loading {
+    margin-top: 10px;
+    color: #666;
+  }
+  
+  .result {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }

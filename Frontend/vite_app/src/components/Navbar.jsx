@@ -42,6 +42,7 @@ const Navbar = () => {
         <li><NavLink to="/why-join" onClick={() => setIsMenuOpen(false)}>Why Join</NavLink></li>
         <li><NavLink to="/trainers-details" onClick={() => setIsMenuOpen(false)}>Trainers Details</NavLink></li>
         <li><NavLink to="/photos" onClick={() => setIsMenuOpen(false)}>Photos</NavLink></li>
+        <li><NavLink to="/Diet" onClick={() => setIsMenuOpen(false)}>Diet Plan</NavLink></li>
         {isAuthenticated && (
           <li><NavLink to="/our-blog" onClick={() => setIsMenuOpen(false)}>Our Blog</NavLink></li>
         )}

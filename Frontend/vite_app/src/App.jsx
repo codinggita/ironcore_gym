@@ -23,6 +23,7 @@ import VerifyEmail from "./Authentication/VerifyEmail";
 
 import PassmembershipPlans from "./Membership/pass-membership";
 import FeastmembershipPlans from "./Membership/feast-membership";
+import Diet from "./pages/Diet";
 
 import "./App.css";
 
@@ -55,6 +56,7 @@ function AppContent() {
         <Route path="/photos" element={<Photos />} />
         <Route path="/our-blog" element={<Blog />} />
         <Route path="/review" element={<Review />} />
+       
       </Route>
 
       {/* Auth routes without navbar & footer */}
@@ -71,6 +73,7 @@ function AppContent() {
         <Route path="/trainers-details" element={<TrainersDetails />} />
         <Route path="/blog/:id" element={<Blog />} />
         <Route path="/wellness" element={<Wellness />} />
+        <Route path="/Diet" element={<Diet />} />
       </Route>
 
       {/* Protected membership routes with navbar only */}
