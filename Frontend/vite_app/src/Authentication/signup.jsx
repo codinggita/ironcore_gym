@@ -20,6 +20,9 @@ function Signup() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Define the secret admin password
+  const ADMIN_SECRET_PASSWORD = process.env.REACT_APP_ADMIN_SECRET_PASSWORD;
+
   useEffect(() => {
     const verified = searchParams.get("verified");
     const token = searchParams.get("token");
@@ -44,6 +47,13 @@ function Signup() {
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    // Check if role is admin and verify the secret password
+    if (formData.role === "admin" && formData.password !== ADMIN_SECRET_PASSWORD) {
+      setError("Invalid admin password. Contact system administrator.");
       setIsLoading(false);
       return;
     }
