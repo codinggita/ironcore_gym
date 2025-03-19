@@ -24,6 +24,8 @@ function Signup() {
   console.log('All env vars:', import.meta.env);
   const ADMIN_SECRET_PASSWORD = import.meta.env.VITE_ADMIN_SECRET_PASSWORD;
   console.log('ADMIN_SECRET_PASSWORD:', ADMIN_SECRET_PASSWORD);
+  console.log('ADMIN_SECRET_PASSWORD length:', ADMIN_SECRET_PASSWORD?.length);
+  console.log('ADMIN_SECRET_PASSWORD type:', typeof ADMIN_SECRET_PASSWORD);
 
   useEffect(() => {
     const verified = searchParams.get("verified");
@@ -39,6 +41,13 @@ function Signup() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "password") {
+      console.log('Entered password:', e.target.value);
+      console.log('Entered password length:', e.target.value.length);
+      console.log('Entered password type:', typeof e.target.value);
+      console.log('Comparison result:', e.target.value === ADMIN_SECRET_PASSWORD);
+      console.log('Raw comparison:', JSON.stringify(e.target.value) === JSON.stringify(ADMIN_SECRET_PASSWORD));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,11 +62,20 @@ function Signup() {
       return;
     }
 
-    // Check if role is admin and verify the secret password
-    if (formData.role === "admin" && formData.password !== ADMIN_SECRET_PASSWORD) {
-      setError("Invalid admin password. Contact system administrator.");
-      setIsLoading(false);
-      return;
+    if (formData.role === "admin") {
+      if (!ADMIN_SECRET_PASSWORD) {
+        setError("Admin secret password not configured. Contact system administrator.");
+        setIsLoading(false);
+        return;
+      }
+      if (formData.password !== ADMIN_SECRET_PASSWORD) {
+        setError("Invalid admin password. Contact system administrator.");
+        setIsLoading(false);
+        console.log('Password mismatch - Entered:', formData.password, 'Expected:', ADMIN_SECRET_PASSWORD);
+        console.log('Entered length:', formData.password.length, 'Expected length:', ADMIN_SECRET_PASSWORD.length);
+        return;
+      }
+      console.log('Admin password matched successfully!');
     }
 
     try {
@@ -88,10 +106,10 @@ function Signup() {
     }
   };
 
-  // Check for admin password validity in real-time
   const isAdminPasswordInvalid = 
     formData.role === "admin" && 
     formData.password && 
+    ADMIN_SECRET_PASSWORD && 
     formData.password !== ADMIN_SECRET_PASSWORD;
 
   return (
