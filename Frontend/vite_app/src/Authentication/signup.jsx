@@ -20,8 +20,10 @@ function Signup() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Define the secret admin password
-  const ADMIN_SECRET_PASSWORD = process.env.REACT_APP_ADMIN_SECRET_PASSWORD;
+  // Log all environment variables and access the admin secret password
+  console.log('All env vars:', import.meta.env);
+  const ADMIN_SECRET_PASSWORD = import.meta.env.VITE_ADMIN_SECRET_PASSWORD;
+  console.log('ADMIN_SECRET_PASSWORD:', ADMIN_SECRET_PASSWORD);
 
   useEffect(() => {
     const verified = searchParams.get("verified");
@@ -85,6 +87,12 @@ function Signup() {
       setIsLoading(false);
     }
   };
+
+  // Check for admin password validity in real-time
+  const isAdminPasswordInvalid = 
+    formData.role === "admin" && 
+    formData.password && 
+    formData.password !== ADMIN_SECRET_PASSWORD;
 
   return (
     <div className="signup-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -152,7 +160,10 @@ function Signup() {
               <option value="admin">Admin</option>
             </select>
           </div>
-          {error && <p className="error-text">{error}</p>}
+          {isAdminPasswordInvalid && (
+            <p className="error-text">Invalid admin password. Contact system administrator.</p>
+          )}
+          {error && !isAdminPasswordInvalid && <p className="error-text">{error}</p>}
           {success && <p className="success-text">{success}</p>}
           <button type="submit" className="submit-btn" disabled={isLoading || verificationSent}>
             {isLoading ? "Sending..." : verificationSent ? "Verification Sent" : "Create Account"}
