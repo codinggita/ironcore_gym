@@ -20,6 +20,13 @@ function Signup() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Log all environment variables and access the admin secret password
+  console.log('All env vars:', import.meta.env);
+  const ADMIN_SECRET_PASSWORD = import.meta.env.VITE_ADMIN_SECRET_PASSWORD;
+  console.log('ADMIN_SECRET_PASSWORD:', ADMIN_SECRET_PASSWORD);
+  console.log('ADMIN_SECRET_PASSWORD length:', ADMIN_SECRET_PASSWORD?.length);
+  console.log('ADMIN_SECRET_PASSWORD type:', typeof ADMIN_SECRET_PASSWORD);
+
   useEffect(() => {
     const verified = searchParams.get("verified");
     const token = searchParams.get("token");
@@ -34,6 +41,13 @@ function Signup() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "password") {
+      console.log('Entered password:', e.target.value);
+      console.log('Entered password length:', e.target.value.length);
+      console.log('Entered password type:', typeof e.target.value);
+      console.log('Comparison result:', e.target.value === ADMIN_SECRET_PASSWORD);
+      console.log('Raw comparison:', JSON.stringify(e.target.value) === JSON.stringify(ADMIN_SECRET_PASSWORD));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -46,6 +60,22 @@ function Signup() {
       setError("Passwords do not match");
       setIsLoading(false);
       return;
+    }
+
+    if (formData.role === "admin") {
+      if (!ADMIN_SECRET_PASSWORD) {
+        setError("Admin secret password not configured. Contact system administrator.");
+        setIsLoading(false);
+        return;
+      }
+      if (formData.password !== ADMIN_SECRET_PASSWORD) {
+        setError("Invalid admin password. Contact system administrator.");
+        setIsLoading(false);
+        console.log('Password mismatch - Entered:', formData.password, 'Expected:', ADMIN_SECRET_PASSWORD);
+        console.log('Entered length:', formData.password.length, 'Expected length:', ADMIN_SECRET_PASSWORD.length);
+        return;
+      }
+      console.log('Admin password matched successfully!');
     }
 
     try {
@@ -75,6 +105,12 @@ function Signup() {
       setIsLoading(false);
     }
   };
+
+  const isAdminPasswordInvalid = 
+    formData.role === "admin" && 
+    formData.password && 
+    ADMIN_SECRET_PASSWORD && 
+    formData.password !== ADMIN_SECRET_PASSWORD;
 
   return (
     <div className="signup-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -142,7 +178,10 @@ function Signup() {
               <option value="admin">Admin</option>
             </select>
           </div>
-          {error && <p className="error-text">{error}</p>}
+          {isAdminPasswordInvalid && (
+            <p className="error-text">Invalid admin password. Contact system administrator.</p>
+          )}
+          {error && !isAdminPasswordInvalid && <p className="error-text">{error}</p>}
           {success && <p className="success-text">{success}</p>}
           <button type="submit" className="submit-btn" disabled={isLoading || verificationSent}>
             {isLoading ? "Sending..." : verificationSent ? "Verification Sent" : "Create Account"}
