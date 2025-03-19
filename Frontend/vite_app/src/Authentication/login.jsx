@@ -16,6 +16,37 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Function to check if the user is an admin and if profile is complete
+  const checkUserDetails = async (token) => {
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      const isAdmin = decoded.role === "admin";
+      
+      // If user is admin, skip profile check
+      if (isAdmin) {
+        return { isAdmin, redirectTo: "/admin-dashboard" };
+      }
+
+      // For non-admins, check if profile is complete (assuming API or token has this info)
+      // Here, we'll simulate with a fetch to a profile endpoint
+      const response = await fetch("http://localhost:5000/api/user/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const profileData = await response.json();
+
+      if (response.ok && profileData.isProfileComplete) {
+        return { isAdmin: false, redirectTo: location.state?.from?.pathname || "/home" };
+      } else {
+        return { isAdmin: false, redirectTo: "/user-profile-form" };
+      }
+    } catch (error) {
+      console.error("Error checking user details:", error);
+      // Default to profile form if there's an error, unless admin
+      const isAdmin = JSON.parse(atob(token.split(".")[1])).role === "admin";
+      return { isAdmin, redirectTo: isAdmin ? "/admin-dashboard" : "/user-profile-form" };
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -25,7 +56,6 @@ function Login() {
 //http://localhost:5000/api/user/signIn
 
     try {
-      // const response = await fetch("http://localhost:5000/api/user/signIn", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,12 +65,15 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("userToken", data.token);
+        const token = data.token;
+        localStorage.setItem("userToken", token);
         if (keepLoggedIn) {
           localStorage.setItem("keepLoggedIn", "true");
         }
-        const from = location.state?.from?.pathname || "/home";
-        navigate(from, { replace: true });
+
+        // Check user details and determine redirect
+        const { isAdmin, redirectTo } = await checkUserDetails(token);
+        navigate(redirectTo, { replace: true });
       } else {
         setError(data.message || "Invalid email or password");
       }
@@ -60,13 +93,13 @@ function Login() {
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Phone number, username, or E-mail</label>
-            <input 
-              type="text" 
-              id="email" 
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
               disabled={isLoading}
             />
           </div>
@@ -74,17 +107,17 @@ function Login() {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input-container">
-              <input 
+              <input
                 type={showPassword ? "text" : "password"}
-                id="password" 
-                name="password" 
-                value={formData.password} 
-                onChange={handleChange} 
-                required 
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
                 disabled={isLoading}
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
@@ -96,14 +129,16 @@ function Login() {
 
           <div className="form-group remember-me">
             <label>
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 checked={keepLoggedIn}
                 onChange={(e) => setKeepLoggedIn(e.target.checked)}
                 disabled={isLoading}
               /> Keep me logged in
             </label>
-            <Link to="/forgot-password" className="forgot-password">Forgot Password</Link>
+            <Link to="/forgot-password" className="forgot-password">
+              Forgot Password
+            </Link>
           </div>
 
           {error && <p className="error-text">{error}</p>}
@@ -114,7 +149,9 @@ function Login() {
           </button>
         </form>
 
-        <p className="auth-link">Don't have an account? <Link to="/signup">Register</Link></p>
+        <p className="auth-link">
+          Don't have an account? <Link to="/signup">Register</Link>
+        </p>
 
         <div className="footer-links">
           <a href="/terms">Terms Of Use</a>

@@ -9,6 +9,7 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,9 +28,7 @@ function Signup() {
     if (verified === "true" && token && email) {
       localStorage.setItem("userToken", token);
       setSuccess("Account successfully verified! Redirecting to login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      setTimeout(() => navigate("/login"), 2000);
     }
   }, [searchParams, navigate]);
 
@@ -50,7 +49,6 @@ function Signup() {
     }
 
     try {
-      // const response = await fetch("http://localhost:5000/api/user/initiate-signup", {
       const response = await fetch("https://authentication-backend-kbui.onrender.com/api/user/initiate-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,11 +59,12 @@ function Signup() {
       const data = await response.json();
       if (response.ok) {
         setVerificationSent(true);
-        setSuccess("A verification email has been sent to your email address. Please check your inbox (and spam/junk folder) and click the link to verify your account.");
+        setSuccess("Verification email sent! Please check your inbox.");
         setFormData({
           email: "",
           password: "",
-          confirmPassword: ""
+          confirmPassword: "",
+          role: "user",
         });
       } else {
         setError(data.message || "Something went wrong.");
@@ -96,86 +95,63 @@ function Signup() {
               disabled={isLoading || verificationSent}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="password-input-container">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                id="password" 
-                name="password" 
-                value={formData.password} 
-                onChange={handleChange} 
-                required 
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
                 disabled={isLoading || verificationSent}
               />
-              <button 
-                type="button" 
-                className="password-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={isLoading || verificationSent}
-              >
+              <button type="button" onClick={() => setShowPassword(!showPassword)} disabled={isLoading || verificationSent}>
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
-
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <div className="password-input-container">
-              <input 
-                type={showConfirmPassword ? "text" : "password"} 
-                id="confirmPassword" 
-                name="confirmPassword" 
-                value={formData.confirmPassword} 
-                onChange={handleChange} 
-                required 
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
                 disabled={isLoading || verificationSent}
               />
-              <button 
-                type="button" 
-                className="password-toggle-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isLoading || verificationSent}
-              >
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} disabled={isLoading || verificationSent}>
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
-
+          <div className="form-group">
+            <label htmlFor="role">Account Type</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              disabled={isLoading || verificationSent}
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
           {error && <p className="error-text">{error}</p>}
           {success && <p className="success-text">{success}</p>}
-
-          <p className="terms-text">
-            When you click Create account, you agree with our <a href="/terms">Terms and Conditions</a>, and confirm that
-            you've read our <a href="/privacy">Privacy Policy</a>.
-          </p>
-
-          <button 
-            type="submit" 
-            className="submit-btn" 
-            disabled={isLoading || verificationSent}
-          >
-            {isLoading ? (
-              <>
-                Sending Verification Email...
-                <span className="loading-spinner"></span>
-              </>
-            ) : verificationSent ? (
-              'Verification Email Sent'
-            ) : (
-              'Create Account'
-            )}
+          <button type="submit" className="submit-btn" disabled={isLoading || verificationSent}>
+            {isLoading ? "Sending..." : verificationSent ? "Verification Sent" : "Create Account"}
           </button>
         </form>
 
-        <p className="auth-link">Already have an account? <Link to="/login">Log in</Link></p>
-
-        <div className="footer-links">
-          <a href="/terms">Terms Of Use</a>
-          <span> | </span>
-          <a href="/privacy">Privacy Policy</a>
-        </div>
+        <p className="auth-link">
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
       </div>
     </div>
   );

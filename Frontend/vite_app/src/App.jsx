@@ -25,6 +25,9 @@ import PassmembershipPlans from "./Membership/pass-membership";
 import FeastmembershipPlans from "./Membership/feast-membership";
 import Diet from "./pages/Diet";
 
+import AdminPanel from './components/AdminDashboard'; // Replace AdminDashboard with AdminPanel
+import UserProfileForm from './components/UserProfileForm';
+
 import "./App.css";
 
 function App() {
@@ -56,7 +59,7 @@ function AppContent() {
         <Route path="/photos" element={<Photos />} />
         <Route path="/our-blog" element={<Blog />} />
         <Route path="/review" element={<Review />} />
-       
+
       </Route>
 
       {/* Auth routes without navbar & footer */}
@@ -74,6 +77,7 @@ function AppContent() {
         <Route path="/blog/:id" element={<Blog />} />
         <Route path="/wellness" element={<Wellness />} />
         <Route path="/Diet" element={<Diet />} />
+        <Route path="/user-profile-form" element={<UserProfileForm />} />
       </Route>
 
       {/* Protected membership routes with navbar only */}
@@ -82,7 +86,10 @@ function AppContent() {
         <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
       </Route>
 
-      {/* Catch all route for 404 */}
+      <Route element={<AdminLayout />}>
+        <Route path="/admin-dashboard" element={<AdminPanel />} /> {/* Updated to AdminPanel */}
+      </Route>
+
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
@@ -142,6 +149,29 @@ const MembershipLayout = () => {
       </main>
     </div>
   );
+};
+
+const AdminLayout = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("userToken");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const decoded = JSON.parse(atob(token.split('.')[1]));
+      if (decoded.role !== 'admin') {
+        navigate("/home");
+      }
+    } catch (error) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  return token ? <Outlet /> : null; // No Navbar or Footer
 };
 
 export default App;

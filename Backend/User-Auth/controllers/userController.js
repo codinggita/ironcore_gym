@@ -3,46 +3,46 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import crypto from 'crypto';
+import Referral from "../models/referralModel.js";
 
 const tempUsers = new Map();
 const tempOTPs = new Map();
 
 export const initiateSignUp = async (req, res) => {
-  const { email, password, confirmPassword } = req.body;
+  const { email, password, role } = req.body;
 
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Passwords do not match" });
-  }
-
+  // Password confirmation check removed as it's handled in frontend now
   let existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({ message: "User Already Exists" });
   }
 
-  const verificationToken = crypto.randomBytes(32).toString('hex');
-  
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+
+  // Store only necessary data in tempUsers
   tempUsers.set(email, {
     password,
+    role,
     verificationToken,
-    createdAt: new Date()
+    createdAt: new Date(),
   });
 
   // const verificationLink = `http://localhost:5173/verify-email/${verificationToken}`;
   const verificationLink = `https://authentication-backend-kbui.onrender.com/api/user/verify-email/${verificationToken}?email=${encodeURIComponent(email)}`;
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+      pass: process.env.EMAIL_PASS,
+    },
   });
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Email Verification - IRONCORE GYM',
+      subject: "Email Verification - IRONCORE GYM",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; text-align: center;">Welcome to IRONCORE GYM!</h2>
@@ -62,15 +62,16 @@ export const initiateSignUp = async (req, res) => {
             </p>
           </div>
         </div>
-      `
+      `,
     });
 
-    res.json({ 
+    res.json({
       success: true,
-      message: "Verification email sent! Please check your inbox (and spam folder) to verify your account. You'll be redirected to login after verification." 
+      message:
+        "Verification email sent! Please check your inbox (and spam folder) to verify your account. You'll be redirected to login after verification.",
     });
   } catch (error) {
-    console.error('Error sending verification email:', error);
+    console.error("Error sending verification email:", error);
     res.status(500).json({ message: "Error sending verification email" });
   }
 };
@@ -78,62 +79,59 @@ export const initiateSignUp = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   const { token } = req.params;
   const { email } = req.query;
-  
+
+  // Validate inputs
   if (!email || !token) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       success: false,
-      message: "Invalid verification link" 
+      message: "Invalid verification link",
     });
   }
 
-  let userData = null;
-  
-  for (const [userEmail, data] of tempUsers.entries()) {
-    if (userEmail === email && data.verificationToken === token) {
-      userData = data;
-      break;
-    }
-  }
-
-  if (!userData) {
-    return res.status(400).json({ 
+  // Find user data in tempUsers
+  const userData = tempUsers.get(email);
+  if (!userData || userData.verificationToken !== token) {
+    return res.status(400).json({
       success: false,
-      message: "Invalid or expired verification link" 
+      message: "Invalid or expired verification link",
     });
   }
 
-  if (new Date() - userData.createdAt > 30 * 60 * 1000) {
+  // Check expiration (30 minutes)
+  const timeDiff = new Date() - new Date(userData.createdAt);
+  if (timeDiff > 30 * 60 * 1000) {
     tempUsers.delete(email);
-    return res.status(400).json({ 
+    return res.status(400).json({
       success: false,
-      message: "Verification link has expired" 
+      message: "Verification link has expired",
     });
   }
 
   try {
-    const user = await User.create({ 
-      email: email, 
-      password: userData.password,
-      isVerified: true
+    // Create new user
+    const newUser = new User({
+      email: email,
+      password: userData.password, // Will be hashed by pre-save hook
+      role: userData.role || "user", // Include role from tempUsers
+      isVerified: true,
     });
+    await newUser.save();
 
+    // Clean up tempUsers
     tempUsers.delete(email);
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { 
-      expiresIn: "7d" 
-    });
+    // Generate token using model method
+    const authToken = newUser.generateAuthToken(); // Uses method from userModel.js
 
-    res.status(200).json({
-      success: true,
-      message: "Email verified successfully",
-      message: "Now you can login.",
-      token
-    });
+    // Redirect to frontend with token
+    res.redirect(
+      `https://ironcore-gym-2.onrender.com/signup?verified=true&token=${authToken}&email=${encodeURIComponent(email)}`
+    );
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ 
+    console.error("Error verifying email:", error);
+    res.status(500).json({
       success: false,
-      message: "Error verifying email. Please try again." 
+      message: "Error verifying email. Please try again.",
     });
   }
 };
@@ -151,7 +149,7 @@ export const signIn = async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ message: "Invalid Email or Password" });
 
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
   res
     .status(200)
@@ -270,5 +268,105 @@ export const resetPassword = async (req, res) => {
     res.json({ message: "Password reset successful" });
   } catch (error) {
     res.status(500).json({ message: "Error resetting password" });
+  }
+};
+
+export const getReferralCode = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user.referralCode) {
+      user.referralCode = 'REF' + crypto.randomBytes(4).toString('hex').toUpperCase();
+      await user.save();
+    }
+    res.json({ referralCode: user.referralCode });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching referral code" });
+  }
+};
+
+export const getRewards = async (req, res) => {
+  try {
+    const referrals = await Referral.find({ referrerId: req.user._id });
+    const rewards = referrals.map(r => ({
+      referralId: r._id,
+      type: 'discount',
+      value: 10,
+      status: r.rewardApplied ? 'claimed' : 'pending'
+    }));
+    res.json(rewards);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching rewards" });
+  }
+};
+
+export const applyReward = async (req, res) => {
+  try {
+    const { referralId } = req.body;
+    const referral = await Referral.findById(referralId);
+    if (!referral || referral.referrerId.toString() !== req.user._id.toString() || referral.rewardApplied) {
+      return res.status(400).json({ message: "Invalid or already claimed reward" });
+    }
+    const user = await User.findById(req.user._id);
+    user.membership.discount = (user.membership.discount || 0) + 10;
+    referral.rewardApplied = true;
+    await Promise.all([user.save(), referral.save()]);
+    res.json({ message: "Reward applied", discount: user.membership.discount });
+  } catch (error) {
+    res.status(500).json({ message: "Error applying reward" });
+  }
+};
+
+// Get user profile
+export const getProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.json(user);
+};
+
+// Update user profile
+export const updateProfile = async (req, res) => {
+  try {
+    // Check if user is authenticated
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+    }
+
+    // Find user by ID
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update fields only if provided in request body
+    user.name = req.body.name || user.name;
+    user.contact = req.body.contact || user.contact;
+    user.fitnessGoals = req.body.fitnessGoals || user.fitnessGoals;
+    user.workoutPreferences = req.body.workoutPreferences || user.workoutPreferences;
+    user.bodyMeasurements = req.body.bodyMeasurements || user.bodyMeasurements;
+
+    // Save updated user
+    await user.save();
+
+    // Return updated user
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        contact: user.contact,
+        fitnessGoals: user.fitnessGoals,
+        workoutPreferences: user.workoutPreferences,
+        bodyMeasurements: user.bodyMeasurements,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating profile",
+      error: error.message,
+    });
   }
 };
