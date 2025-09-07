@@ -1,0 +1,65 @@
+.floating-exercise-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.floating-exercise-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.floating-exercise-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.floating-exercise-button svg {
+  transition: transform 0.3s ease;
+}
+
+.floating-exercise-button:hover svg {
+  transform: rotate(10deg);
+}
+
+
+@media (max-width: 768px) {
+  .floating-exercise-button {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .floating-exercise-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-exercise-button {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .floating-exercise-button svg {
+    width: 18px;
+    height: 18px;
+  }
+}
