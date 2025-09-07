@@ -81,6 +81,7 @@ Some platforms like **Mepack** offer similar services but lack a seamless and us
 ✔️ Detailed gym information, including trainers, services, and reviews  
 ✔️ BMI calculator & AI-powered diet plans  
 ✔️ High-quality gym photos & blogs for better decision-making  
+✔️ **Comprehensive ExerciseHub** with 2000+ exercises and smart filtering  
 
 ---
 
@@ -93,6 +94,7 @@ Some platforms like **Mepack** offer similar services but lack a seamless and us
 - 🎯 Blog Section  
 - 🎯 BMI Calculator & AI-Generated Diet Plans  
 - 🎯 Review Section
+- 🏋️ **ExerciseHub** - Comprehensive Exercise Library with Floating Navigation
 
 ---
 
@@ -108,6 +110,7 @@ Some platforms like **Mepack** offer similar services but lack a seamless and us
 ✔️ All-in-one gym-related information  
 ✔️ AI-generated diet plans verified by trainers  
 ✔️ Time-saving, hassle-free experience  
+✔️ **Advanced ExerciseHub** with floating navigation and comprehensive exercise library  
 
 ---
 
@@ -141,6 +144,29 @@ Some platforms like **Mepack** offer similar services but lack a seamless and us
 | AI-generated diet plans may have inaccuracies | Use verified AI models & consult fitness experts |
 | Legal compliance for diet recommendations | Validate with certified trainers & legal professionals |
 | Partnering with multiple gyms | Establish partnerships & collaborations |
+
+---
+
+## 🏋️ ExerciseHub Feature
+### 🎯 Advanced Exercise Library
+✅ **2000+ Exercises** with detailed instructions and media  
+✅ **Smart Filtering** by equipment type and muscle groups  
+✅ **Real-time Search** across exercise names and muscle groups  
+✅ **Video & Image Support** with proper display controls  
+✅ **Floating Navigation Button** for quick access across pages  
+✅ **Responsive Design** optimized for all devices  
+
+### 🎨 Modern UI/UX
+✅ **Dark Theme** with glass-morphism effects  
+✅ **Smooth Animations** and hover interactions  
+✅ **Professional Design** matching fitness app standards  
+✅ **Mobile-First** responsive layout  
+
+### 🔧 Technical Features
+✅ **Default Exercise Selection** for better user experience  
+✅ **Reset Functionality** to clear all filters  
+✅ **Conditional Visibility** - button appears only on specified pages  
+✅ **Accessibility Support** with proper ARIA labels  
 
 ---
 
