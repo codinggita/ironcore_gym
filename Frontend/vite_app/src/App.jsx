@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate, 
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import FloatingExerciseButton from "./components/FloatingExerciseButton";
 
 import Home from "./pages/Home";
 import Service from "./pages/Service";
@@ -24,6 +25,7 @@ import VerifyEmail from "./Authentication/VerifyEmail";
 import PassmembershipPlans from "./Membership/pass-membership";
 import FeastmembershipPlans from "./Membership/feast-membership";
 import Diet from "./pages/Diet";
+import ExerciseHub from "./pages/ExerciseHub";
 
 import AdminPanel from './components/AdminDashboard'; // Replace AdminDashboard with AdminPanel
 import UserProfileForm from './components/UserProfileForm';
@@ -59,6 +61,7 @@ function AppContent() {
         <Route path="/photos" element={<Photos />} />
         <Route path="/our-blog" element={<Blog />} />
         <Route path="/review" element={<Review />} />
+        <Route path="/exercise-hub" element={<ExerciseHub />} />
 
       </Route>
 
@@ -104,6 +107,7 @@ const PublicLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <FloatingExerciseButton />
     </div>
   );
 };
@@ -126,6 +130,7 @@ const ProtectedLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <FloatingExerciseButton />
     </div>
   );
 };
