@@ -8,9 +8,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("userToken");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false); // For user dropdown
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  // Check if the user is an admin by decoding the JWT token
   const isAdmin = () => {
     const token = localStorage.getItem("userToken");
     if (!token) return false;
@@ -26,12 +25,12 @@ const Navbar = () => {
   const handleProfileClick = () => {
     if (isAuthenticated) {
       if (isAdmin()) {
-        navigate("/admin-dashboard"); // Admins go directly to dashboard
+        navigate("/admin-dashboard");
       } else {
-        setShowDropdown(!showDropdown); // Non-admins toggle dropdown
+        setShowDropdown(!showDropdown);
       }
     } else {
-      setShowDropdown(!showDropdown); // Show sign-in option if not authenticated
+      setShowDropdown(!showDropdown);
     }
     setIsMenuOpen(false);
   };
@@ -61,13 +60,10 @@ const Navbar = () => {
       <button className="menu-toggle" onClick={toggleMenu}>
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
+
       <ul className={`nav-links ${isMenuOpen ? "active" : ""}`}>
         <li>
-          <NavLink
-            to="/home"
-            className={({ isActive }) => (isActive ? "active" : "")}
-            onClick={() => setIsMenuOpen(false)}
-          >
+          <NavLink to="/home" onClick={() => setIsMenuOpen(false)}>
             Home
           </NavLink>
         </li>
@@ -96,29 +92,29 @@ const Navbar = () => {
             Diet Plan
           </NavLink>
         </li>
-        {isAuthenticated && (
-          <li>
-            <NavLink to="/our-blog" onClick={() => setIsMenuOpen(false)}>
-              Our Blog
-            </NavLink>
-          </li>
-        )}
-        {isAuthenticated && (
-          <li>
-            <NavLink to="/wellness" onClick={() => setIsMenuOpen(false)}>
-              Wellness
-            </NavLink>
-          </li>
-        )}
+
+        {/* 🔓 Now Everyone Can See These */}
+        <li>
+          <NavLink to="/our-blog" onClick={() => setIsMenuOpen(false)}>
+            Our Blog
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink to="/wellness" onClick={() => setIsMenuOpen(false)}>
+            Wellness
+          </NavLink>
+        </li>
+
         <li className="user-menu">
           <button
             className="user-icon-btn"
             onClick={handleProfileClick}
-            onBlur={() => setTimeout(() => setShowDropdown(false), 200)} // Close dropdown when focus is lost
+            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           >
             <UserCircle size={32} />
           </button>
-          {/* Show dropdown only for non-admins or unauthenticated users */}
+
           {!isAdmin() && showDropdown && (
             <div className="dropdown-menu">
               {isAuthenticated ? (

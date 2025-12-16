@@ -62,6 +62,11 @@ function AppContent() {
         <Route path="/our-blog" element={<Blog />} />
         <Route path="/review" element={<Review />} />
         <Route path="/exercise-hub" element={<ExerciseHub />} />
+         <Route path="/trainers-details" element={<TrainersDetails />} />
+        <Route path="/blog/:id" element={<Blog />} />
+        <Route path="/wellness" element={<Wellness />} />
+        <Route path="/Diet" element={<Diet />} />
+        <Route path="/user-profile-form" element={<UserProfileForm />} />
 
       </Route>
 
@@ -76,11 +81,7 @@ function AppContent() {
 
       {/* Protected routes with navbar & footer */}
       <Route element={isAuthenticated ? <ProtectedLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>
-        <Route path="/trainers-details" element={<TrainersDetails />} />
-        <Route path="/blog/:id" element={<Blog />} />
-        <Route path="/wellness" element={<Wellness />} />
-        <Route path="/Diet" element={<Diet />} />
-        <Route path="/user-profile-form" element={<UserProfileForm />} />
+       
       </Route>
 
       {/* Protected membership routes with navbar only */}
