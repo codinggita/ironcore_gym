@@ -87,11 +87,7 @@ function Blog() {
   };
 
   const handleReadMore = (articleId) => {
-    if (isAuthenticated) {
       navigate(`/blog/${articleId}`);
-    } else {
-      navigate('/login', { state: { from: { pathname: `/blog/${articleId}` } } });
-    }
   };
 
   if (id) {
