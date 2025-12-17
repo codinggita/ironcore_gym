@@ -7,11 +7,7 @@ const Home = ({ isAuthenticated }) => {
     const navigate = useNavigate();
 
     const handleJoinNowClick = () => {
-        if (isAuthenticated) {
             navigate('/pass-membership-plans');
-        } else {
-            navigate('/login', { state: { from: { pathname: '/pass-membership-plans' } } });
-        }
     };
 
     return (
