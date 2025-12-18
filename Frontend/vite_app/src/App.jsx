@@ -85,10 +85,16 @@ function AppContent() {
       </Route>
 
       {/* Protected membership routes with navbar only */}
-      <Route element={isAuthenticated ? <MembershipLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>
+      {/* <Route element={isAuthenticated ? <MembershipLayout /> : <Navigate to="/login" state={{ from: location }} replace />}>
         <Route path="/pass-membership-plans" element={<PassmembershipPlans />} />
         <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
-      </Route>
+      </Route> */}
+
+      <Route element={<PublicMembershipLayout />}>
+  <Route path="/pass-membership-plans" element={<PassmembershipPlans />} />
+  <Route path="/feast-membership-plans" element={<FeastmembershipPlans />} />
+</Route>
+
 
       <Route element={<AdminLayout />}>
         <Route path="/admin-dashboard" element={<AdminPanel />} /> {/* Updated to AdminPanel */}
@@ -179,5 +185,16 @@ const AdminLayout = () => {
 
   return token ? <Outlet /> : null; // No Navbar or Footer
 };
+
+const PublicMembershipLayout = () => {
+  return (
+    <div className="membership-page-container">
+      <main className="content-wrap">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
 
 export default App;
